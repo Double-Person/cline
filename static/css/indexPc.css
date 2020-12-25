@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    background-color: #F0F1F3;
+}
+
+span {
+    color: #000000;
+    font-size: 18px;
+    line-height: 32px;
+    letter-spacing: 1px;
+}
+
+.span-active {
+    color: #446CEA;
+    line-height: 74px;
+}
+
+.button-submit {
+    background: rgba(68, 108, 234, 1);
+    height: 60px;
+    padding: 0 70px;
+    border-radius: 30px;
+    border: 0;
+    color: white;
+}

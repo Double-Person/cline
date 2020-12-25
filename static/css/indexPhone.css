@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    background-color: #F0F1F3;
+}
+
+span {
+    color: #000000;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 1px;
+}

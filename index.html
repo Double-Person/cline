@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="./static/css/indexPc.css">
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script type="text/javascript">
+    if (window.innerWidth > 800) {
+        new_element = document.createElement("link");
+        new_element.setAttribute("rel", "stylesheet");
+        new_element.setAttribute("href", "./static/css/indexPc.css");
+        document.body.appendChild(new_element);
+    } else {
+        new_element = document.createElement("link");
+        new_element.setAttribute("rel", "stylesheet");
+        new_element.setAttribute("href", "./static/css/indexPhone.css");
+        document.body.appendChild(new_element);
+    }
+</script>
+
+</html>

@@ -826,6 +826,17 @@
     height: 61px;
     background: white;
   }
+  .header {
+    position: sticky;
+    top: 0;
+     z-index: 3;
+  }
+  .title {
+    position: sticky;
+    top: 61px;
+    background: rgb(240, 241, 243);
+    z-index: 3;
+  }
 
   .header-contain {
     max-width: 1089px;
@@ -955,6 +966,7 @@
     color: rgba(9, 34, 56, 1);
     line-height: 75px;
   }
+
 
   .goodsManage {
     display: flex;

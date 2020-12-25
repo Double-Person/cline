@@ -1,14 +1,16 @@
 <template>
   <div class="contain">
     <div class="button-div">
+      <button class="abled" @click="blankingLog">切料日志</button>
       <!-- <button @click="amendTasks" class="amend">修改任务</button> -->
-      <button @click="amendTasks" v-if="data.canUpdate" v-bind:class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
-      <button @click="revokeTasks" v-if="data.canRevoke" v-bind:class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
-      <button @click="feedBack" v-if="data.canFeedback" v-bind:class="data.canFeedback==true?'abled':'disabled'" >物料反馈</button>
+      
+      <button @click="amendTasks" v-if="data.canUpdate" :class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
+      <button @click="revokeTasks" v-if="data.canRevoke" :class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
+      <button @click="feedBack" v-if="data.canFeedback" :class="data.canFeedback==true?'abled':'disabled'" >物料反馈</button>
       <!-- <button v-if="!data.canAccept">修改任务</button> -->
-      <button v-if="!data.canUpdate" v-bind:class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
-      <button v-if="!data.canRevoke" v-bind:class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
-      <button v-if="!data.canFeedback" v-bind:class="data.canFeedback==true?'abled':'disabled'">物料反馈</button>
+      <button v-if="!data.canUpdate" :class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
+      <button v-if="!data.canRevoke" :class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
+      <button v-if="!data.canFeedback" :class="data.canFeedback==true?'abled':'disabled'">物料反馈</button>
     </div>
     <div class="main">
       <div>
@@ -115,12 +117,17 @@
         </div>
       </div>
     </div>
+
+    <!-- 切料日志 -->
+    <task-info-blanking-log ref="taskInfoBlankingLog" />
   </div>
 </template>
 
 <script>
+import taskInfoBlankingLog from './taskInfoBlankingLog.vue';
 // import cover1 from '@/assets/images/1.jpg'
 export default {
+  components: { taskInfoBlankingLog },
   data() {
     return {
       data: {
@@ -154,6 +161,10 @@ export default {
   },
   destroy() {},
   methods: {
+    // 切料日志
+    blankingLog() {
+      this.$refs.taskInfoBlankingLog.openDialog()
+    },
     init() {
       var params = {
         tasksId: this.$route.query.id,

@@ -150,11 +150,9 @@
       },
       Bacmask(id) {
         this.mask = true;
-        console.log(this.mask)
         this.shipment = id;
       },
       close() {
-        console.log(this.mask)
         this.mask = false;
       },
       enter() {

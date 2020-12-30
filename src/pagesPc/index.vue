@@ -64,116 +64,119 @@
         </div>
       </div>
     </div>
-    <div class="main">
-      <p class="title" v-if="model == 0">
-        任务列表
-        <span
-          v-if="model == 0"
-          v-bind:class="query.giveOrGet == 1 ? 'active' : ''"
-          style="font-size: 16px; cursor: pointer"
-          @click="giveOrGetFuc(1)"
-          >我发布的</span
-        >
-        <span v-if="model == 0" style="font-size: 16px">/</span>
-        <span
-          v-if="model == 0"
-          v-bind:class="query.giveOrGet == 2 ? 'active' : ''"
-          style="font-size: 16px; cursor: pointer"
-          @click="giveOrGetFuc(2)"
-          >我接取的</span
-        >
-        <span v-if="model == 0" style="font-size: 16px">/</span>
-        <span
-          v-if="model == 0"
-          v-bind:class="query.giveOrGet == 3 ? 'active' : ''"
-          style="font-size: 16px; cursor: pointer"
-          @click="giveOrGetFuc(3)"
-          >待接取的</span
-        >
-        <span v-if="model == 0" style="font-size: 16px">/</span>
-        <span
-          v-if="model == 0"
-          v-bind:class="query.giveOrGet == 4 ? 'active' : ''"
-          style="font-size: 16px; cursor: pointer"
-          @click="giveOrGetFuc(4)"
-          >被抄送的</span
-        >
-        <!-- <span v-if="model==0" v-bind:class="query.giveOrGet?'active':''" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(true)"> 我发布的</span>
+    <div class="custom-contain">
+      <div class="custom-left">left</div>
+
+      <div class="main" style="background: pink">
+        <p class="title" v-if="model == 0">
+          任务列表
+          <span
+            v-if="model == 0"
+            v-bind:class="query.giveOrGet == 1 ? 'active' : ''"
+            style="font-size: 16px; cursor: pointer"
+            @click="giveOrGetFuc(1)"
+            >我发布的</span
+          >
+          <span v-if="model == 0" style="font-size: 16px">/</span>
+          <span
+            v-if="model == 0"
+            v-bind:class="query.giveOrGet == 2 ? 'active' : ''"
+            style="font-size: 16px; cursor: pointer"
+            @click="giveOrGetFuc(2)"
+            >我接取的</span
+          >
+          <span v-if="model == 0" style="font-size: 16px">/</span>
+          <span
+            v-if="model == 0"
+            v-bind:class="query.giveOrGet == 3 ? 'active' : ''"
+            style="font-size: 16px; cursor: pointer"
+            @click="giveOrGetFuc(3)"
+            >待接取的</span
+          >
+          <span v-if="model == 0" style="font-size: 16px">/</span>
+          <span
+            v-if="model == 0"
+            v-bind:class="query.giveOrGet == 4 ? 'active' : ''"
+            style="font-size: 16px; cursor: pointer"
+            @click="giveOrGetFuc(4)"
+            >被抄送的</span
+          >
+          <!-- <span v-if="model==0" v-bind:class="query.giveOrGet?'active':''" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(true)"> 我发布的</span>
                 <span v-if="model==0" style="font-size: 16px">/</span>
         <span v-if="model==0" v-bind:class="query.giveOrGet?'':'active'" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(false)">我接取的</span>-->
-      </p>
-      <!-- <p class="title" v-if="model==0">任务列表 <span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'active':''" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(true)"> 我发布的</span><span v-if="model==0&&query.style==2" style="font-size: 16px">/</span><span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'':'active'" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(false)">我接取的</span></p> -->
-      <p class="title goodsManage" v-if="model == 1">
-        <span class="title">消息列表</span>
-        <button @click="changeVoice">修改音乐</button>
-      </p>
-      <p class="title" v-if="model == 2">任务详情</p>
-      <p class="title" v-if="model == 3">物料反馈</p>
-      <p class="title" v-if="model == 4">新建任务</p>
-      <p class="title goodsManage" v-if="model == 5">
-        <span class="title">货款管理</span>
-      </p>
-      <p class="title" v-if="model == 6">新建采购</p>
-      <div class="title" v-if="model == 7" style="height: 75px">
-        <p class="title" style="float: left">材料采购</p>
-        <div class="new" @click="linkTo(9)">新建采购</div>
-        <div class="title-searchBox" style="float: right">
-          <div class="title-searchBox-left" style="float: left">
-            <img
-              v-bind:src="'./static/imgPc/list-icon.png'"
-              @click="listShow"
-            />
+        </p>
+        <!-- <p class="title" v-if="model==0">任务列表 <span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'active':''" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(true)"> 我发布的</span><span v-if="model==0&&query.style==2" style="font-size: 16px">/</span><span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'':'active'" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(false)">我接取的</span></p> -->
+        <p class="title goodsManage" v-if="model == 1">
+          <span class="title">消息列表</span>
+          <button @click="changeVoice">修改音乐</button>
+        </p>
+        <p class="title" v-if="model == 2">任务详情</p>
+        <p class="title" v-if="model == 3">物料反馈</p>
+        <p class="title" v-if="model == 4">新建任务</p>
+        <p class="title goodsManage" v-if="model == 5">
+          <span class="title">货款管理</span>
+        </p>
+        <p class="title" v-if="model == 6">新建采购</p>
+        <div class="title" v-if="model == 7" style="height: 75px">
+          <p class="title" style="float: left">材料采购</p>
+          <div class="new" @click="linkTo(9)">新建采购</div>
+          <div class="title-searchBox" style="float: right">
+            <div class="title-searchBox-left" style="float: left">
+              <img
+                v-bind:src="'./static/imgPc/list-icon.png'"
+                @click="listShow"
+              />
+            </div>
+            <div class="title-searchBox-mid" style="float: left">
+              <input
+                type="text"
+                @keyup.13="searchList(searchText)"
+                v-model="searchText"
+              />
+            </div>
+            <div class="title-searchBox-right" style="float: left">
+              <img
+                v-bind:src="'./static/imgPc/search-icon.png'"
+                @click="searchList(searchText)"
+              />
+            </div>
+            <ul class="searchLisst" v-if="this.listShowFlag">
+              <li>
+                <span class="listLeft">NO.87654321</span>
+                <span class="listRight">铝材</span>
+              </li>
+            </ul>
           </div>
-          <div class="title-searchBox-mid" style="float: left">
-            <input
-              type="text"
-              @keyup.13="searchList(searchText)"
-              v-model="searchText"
-            />
-          </div>
-          <div class="title-searchBox-right" style="float: left">
-            <img
-              v-bind:src="'./static/imgPc/search-icon.png'"
-              @click="searchList(searchText)"
-            />
-          </div>
-          <ul class="searchLisst" v-if="this.listShowFlag">
-            <li>
-              <span class="listLeft">NO.87654321</span>
-              <span class="listRight">铝材</span>
-            </li>
-          </ul>
         </div>
-      </div>
-      <p class="title" v-if="model == 8">新建采购</p>
+        <p class="title" v-if="model == 8">新建采购</p>
 
-      <span v-if="model == 1" class="active">消息列表</span>
-      <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
-        任务列表
-        <span class="active">->任务详情</span>
-      </span>
-      <span v-if="model == 3" @click="linkTo(5)" style="cursor: pointer">
-        任务列表
-        <span>->任务详情</span>
-        <span class="active">->物料反馈</span>
-      </span>
-      <span v-if="model == 4" @click="linkTo(5)" style="cursor: pointer">
-        任务列表
-        <span class="active">->新建任务</span>
-      </span>
-      <span v-if="model == 6" @click="linkTo(6)" style="cursor: pointer">
-        货款管理
-        <span class="active">->新建货款</span>
-      </span>
-      <span v-if="model == 8" @click="linkTo(8)" style="cursor: pointer">
-        物料采购
-        <span class="active">->新建采购</span>
-      </span>
+        <span v-if="model == 1" class="active">消息列表</span>
+        <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
+          任务列表
+          <span class="active">->任务详情</span>
+        </span>
+        <span v-if="model == 3" @click="linkTo(5)" style="cursor: pointer">
+          任务列表
+          <span>->任务详情</span>
+          <span class="active">->物料反馈</span>
+        </span>
+        <span v-if="model == 4" @click="linkTo(5)" style="cursor: pointer">
+          任务列表
+          <span class="active">->新建任务</span>
+        </span>
+        <span v-if="model == 6" @click="linkTo(6)" style="cursor: pointer">
+          货款管理
+          <span class="active">->新建货款</span>
+        </span>
+        <span v-if="model == 8" @click="linkTo(8)" style="cursor: pointer">
+          物料采购
+          <span class="active">->新建采购</span>
+        </span>
 
-      <!-- 页签部分 -->
-      <div class="bookmark-div" v-show="bookmark.show">
-        <div class="bookmark">
-          <!-- <div class="item" v-bind:class="query.taskCondition==1?'item-active':''" @click="changeStyle(1,1)">
+        <!-- 页签部分 -->
+        <div class="bookmark-div" v-show="bookmark.show">
+          <div class="bookmark">
+            <!-- <div class="item" v-bind:class="query.taskCondition==1?'item-active':''" @click="changeStyle(1,1)">
                         <img v-bind:src="query.taskCondition==1?'./static/imgPc/unfinished-active-icon.png':'./static/imgPc/unfinished-icon.png'" alt="">
                         <span>未完成</span>
                     </div>
@@ -185,37 +188,37 @@
                         <img v-bind:src="query.taskCondition==3?'./static/imgPc/expired-active-icon.png':'./static/imgPc/expired-icon.png'" alt="">
                         <span>已过期</span>
           </div>-->
-          <div class="item item-active">
-            <!-- <img v-bind:src="query.taskCondition==3?'./static/imgPc/expired-active-icon.png':'./static/imgPc/expired-icon.png'" alt=""> -->
-            <span>任务列表</span>
+            <div class="item item-active">
+              <!-- <img v-bind:src="query.taskCondition==3?'./static/imgPc/expired-active-icon.png':'./static/imgPc/expired-icon.png'" alt=""> -->
+              <span>任务列表</span>
+            </div>
           </div>
-        </div>
-        <div class="search">
-          <div>
-            <input
-              type="text"
-              v-model="query.keywords"
-              placeholder="请输入关键字搜索"
-            />
+          <div class="search">
+            <div>
+              <input
+                type="text"
+                v-model="query.keywords"
+                placeholder="请输入关键字搜索"
+              />
+              <img
+                :src="'./static/imgPc/search-icon.png'"
+                alt
+                class="search-icon"
+                @click="isSearch()"
+              />
+            </div>
+
             <img
-              :src="'./static/imgPc/search-icon.png'"
-              alt
-              class="search-icon"
-              @click="search"
+              :src="'./static/imgPc/add-task-icon.png'"
+              alt="添加任务"
+              class="add-task-icon"
+              @click="linkTo(4)"
             />
           </div>
-
-          <img
-            :src="'./static/imgPc/add-task-icon.png'"
-            alt="添加任务"
-            class="add-task-icon"
-            @click="linkTo(4)"
-          />
         </div>
-      </div>
 
-      <div class="index">
-        <!-- <div class="index-left" v-show="indexLeft">
+        <div class="index">
+          <!-- <div class="index-left" v-show="indexLeft">
                     <div>
                         <div @click="changeStyle(2,1)" v-bind:class="query.style==1?'activediv':''" title="全部任务">
                             <img v-bind:src="query.style==1?'./static/imgPc/task-public-active-icon.png':'./static/imgPc/task-public-icon.png'" alt="">
@@ -226,67 +229,71 @@
                     </div>
 
         </div>-->
-        <div class="index-right">
-          <div class="condition" v-show="condition.show">
-            <div class="urgent-condition">
-              <img
-                v-bind:src="
-                  query.urgent == 0
-                    ? './static/imgPc/checkbox-icon.png'
-                    : './static/imgPc/checkbox-true-icon.png'
-                "
-                alt
-                @click="clickUrgent"
-              />
-              <span>仅浏览紧急任务</span>
-            </div>
-            <div class="time-condition">
-              <span>时间筛选</span>
-              <div class="block">
+          <div class="index-right">
+            <div class="condition" v-show="condition.show">
+              <div class="urgent-condition">
                 <img
-                  :src="'./static/imgPc/left-icon.png'"
-                  alt="left"
-                  @click="dateChange(1)"
+                  v-bind:src="
+                    query.urgent == 0
+                      ? './static/imgPc/checkbox-icon.png'
+                      : './static/imgPc/checkbox-true-icon.png'
+                  "
+                  alt
+                  @click="clickUrgent"
                 />
-                <!-- <el-date-picker
+                <span>仅浏览紧急任务</span>
+              </div>
+              <div class="time-condition">
+                <span>时间筛选</span>
+                <div class="block">
+                  <img
+                    :src="'./static/imgPc/left-icon.png'"
+                    alt="left"
+                    @click="dateChange(1)"
+                  />
+                  <!-- <el-date-picker
                                     v-model="query.time"
                                     @change="changeData"
                                     type="date"
                                     placeholder="选择日期时间">
                 </el-date-picker>-->
-                <div>
-                  <div
-                    v-for="(item, index) in dateArr"
-                    @click="changeData(item.id, item)"
-                    v-bind:id="item.selected ? 'activeDate' : ''"
-                    class="timer"
-                    :key="index"
-                  >
-                    {{ item.text }}
+                  <div>
+                    <div
+                      v-for="(item, index) in dateArr"
+                      @click="changeData(item.id, item)"
+                      v-bind:id="item.selected ? 'activeDate' : ''"
+                      class="timer"
+                      :key="index"
+                    >
+                      {{ item.text }}
 
-                    <!-- <img :src="'./static/imgPc/gantan.png'" alt  /> -->
-                    <!-- <span v-show="item.timer.status">!</span> -->
-                    <img
-                      :src="'./static/imgPc/gantan.png'"
-                      alt
-                      v-show="item.status"
-                    />
+                      <!-- <img :src="'./static/imgPc/gantan.png'" alt  /> -->
+                      <!-- <span v-show="item.timer.status">!</span> -->
+                      <img
+                        :src="'./static/imgPc/gantan.png'"
+                        alt
+                        v-show="item.status"
+                      />
+                    </div>
                   </div>
+                  <img
+                    :src="'./static/imgPc/right-icon.png'"
+                    alt="left"
+                    @click="dateChange(2)"
+                  />
                 </div>
-                <img
-                  :src="'./static/imgPc/right-icon.png'"
-                  alt="left"
-                  @click="dateChange(2)"
-                />
               </div>
             </div>
-          </div>
-          <div class="cards">
-            <router-view :key="key" :query="query" ref="child"></router-view>
+            <div class="cards">
+              <router-view :key="key" :query="query" ref="child"></router-view>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="custom-right">right</div>
     </div>
+
     <div class="voice" v-show="voiceMask">
       <span class="cancel" @click="closeVoice(false)">取消</span>
       <div>
@@ -820,8 +827,20 @@ export default {
         }
       }
     },
+    isSearch() {
+      if (this.query.giveOrGet == 4) {
+        let routeUrl = this.$router.resolve({
+          path: "/search-copy",
+          query: this.query, // query.keywords
+        });
+        window.open(routeUrl.href, "_blank");
+      } else {
+        this.search();
+      }
+    },
     //刷新表格
     search() {
+      console.log("搜索-------");
       if (this.$refs.child.getData) {
         this.$refs.child.getData();
       } else {
@@ -839,8 +858,6 @@ export default {
       this.bookmark.show = router[id].data.bookmark;
     },
     changeData(id, dele) {
-      // console.log(dele);
-      // console.log(this.datePage);
       var dateArr = this.dateArr;
       for (var i = 0; i < dateArr.length; i++) {
         if (i == id) {
@@ -872,19 +889,17 @@ export default {
       for (var i = 0; i < this.dateArr.length; i++) {
         this.dateArr[i].timer = this.gantan[i];
       }
-      //   console.log(this.dateArr)
+
       var params = {
         userId: JSON.parse(this.$cookie.get("userInfo")).userId,
         dayStr: this.query.time,
         type: this.query.giveOrGet,
       };
       this.$http.get("/api/tasks/findUnfinishedTasks", params).then((res) => {
-        // console.log(res);
         this.gantan = res.data;
         for (var i = 0; i < this.dateArr.length; i++) {
           this.dateArr[i].status = this.gantan[i].status;
         }
-        console.log(this.dateArr, "切换nav,查看同步更新的日历");
       });
       this.search();
     },
@@ -1089,12 +1104,28 @@ export default {
   width: 120px;
 }
 
+.custom-contain {
+  display: flex;
+  justify-content: center;
+}
+.custom-left {
+  width: 240px;
+  margin-right: 4px;
+  background: skyblue;
+}
+.custom-right {
+  width: 240px;
+  margin-left: 4px;
+  background: skyblue;
+}
+
 /* 主要部分 */
 
 .main {
-  max-width: 1089px;
-  min-width: 752px;
-  margin: 0 auto;
+  /* max-width: 1089px;
+  min-width: 752px; */
+  /* margin: 0 auto; */
+  width: 1089px;
 }
 
 .title {

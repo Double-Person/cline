@@ -17,6 +17,7 @@ import schedule from '@/pagesPc/schedule'
 import addProcurement from '@/pagesPc/addProcurement'
 import procurementInfo from '@/pagesPc/procurementInfo'
 import amendTask from "@/pagesPc/amendTask"
+import SearchCopy from "@/pagesPc/SearchCopy"
 /*************pc *********************/
 
 /*************phone *********************/
@@ -105,6 +106,10 @@ if (window.innerWidth > 800) {
             path: '/login',
             name: 'login',
             component: loginPc
+        }, {
+            path: '/search-copy',
+            name: 'SearchCopy',
+            component: SearchCopy
         }]
     })
 } else {

@@ -55,7 +55,7 @@
           <span>任务环节：</span>
         </div>
         <div>
-          <div v-for="(item,index) in data.steps">
+          <div v-for="(item,index) in data.steps" :key="index">
             <div class="step-circle">
               <img
                 v-bind:src="item.endStatus==1?'./static/imgPc/step-true-icon.png':'./static/imgPc/step-false-icon.png'"
@@ -84,7 +84,7 @@
           <span>物料核查：</span>
         </div>
         <ul class="checkUl">
-          <li v-for="(item,index) in data.checks">
+          <li v-for="(item,index) in data.checks" :key="index">
             <div class="changeDiv">
               <span>{{item.name}}</span>
               <select id="choose" v-model="item.flag">
@@ -103,7 +103,7 @@
         <div>
           <span>执行人：</span>
         </div>
-        <div class="executive-div" v-for="item in data.executors">
+        <div class="executive-div" v-for="item in data.executors" :key="item.userName">
           <div class="executive-item">
             <img v-bind:src="'./static/imgPc/head-icon.png'" alt="head" />
             <span>{{item.userName}}</span>

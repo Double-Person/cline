@@ -8,6 +8,9 @@
 > 其他功能代码待整理
 ### 实践是检验真理的唯一标准 XD
 
+
+index.vue    .header-contain  max-width
+
 ## Build Setup
 
 ``` bash

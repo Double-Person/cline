@@ -31,8 +31,11 @@ import Cookie from './assets/commonReq/cookie.js'
 
 //
 Vue.prototype.$http = new Http();
+
 Vue.prototype.$cookie = new Cookie();
 Vue.config.productionTip = false
+// Vue.prototype.$httppath = "http://www.lsibss.com:8080/tasks/api/purchase/saveImage";
+Vue.prototype.$httppath = "http://yflh.hkzhtech.com/tasks/api/purchase/saveImage";
 
 
 Vue.use(ElementUI)

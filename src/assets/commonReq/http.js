@@ -2,7 +2,10 @@ import axios from 'axios'
 import Cookie from '@/assets/commonReq/cookie.js'
 
 // const baseURI="http://127.0.0.1:8080/tasks"
-const baseURI="http://www.lsibss.com:8080/tasks"
+// const baseURI="http://www.lsibss.com:8080/tasks"
+const baseURI="http://yflh.hkzhtech.com/tasks"
+
+
 axios.defaults.baseURI=baseURI
 axios.defaults.headers.common['Access-Control-Allow-Origin']="*"
 /**

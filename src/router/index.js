@@ -14,6 +14,10 @@ import addTaskPc from '@/pagesPc/addTask'
 import getChargePc from '@/pagesPc/getCharge'
 import addChargePc from '@/pagesPc/addCharge'
 import schedule from '@/pagesPc/schedule'
+import ProcessManagement from '@/pagesPc/ProcessManagement'   // 加工进程管理 
+import ExtrusionProcessManagement from '@/pagesPc/ExtrusionProcessManagement'   // 挤出进程管理 
+
+
 import addProcurement from '@/pagesPc/addProcurement'
 import procurementInfo from '@/pagesPc/procurementInfo'
 import amendTask from "@/pagesPc/amendTask"
@@ -101,7 +105,18 @@ if (window.innerWidth > 800) {
                 path: '/procurementInfo',
                 name: 'procurementInfo',
                 component: procurementInfo
-            }]
+            },{
+                path: '/process-management',  // 加工进程管理
+                name: 'ProcessManagement',
+                component: ProcessManagement
+            },{
+                path: '/extrusion-process-management',  // 挤出进程管理
+                name: 'ExtrusionProcessManagement',
+                component: ExtrusionProcessManagement
+            }
+        
+            
+        ]
         }, {
             path: '/login',
             name: 'login',

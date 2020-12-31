@@ -12,7 +12,13 @@
             v-bind:id="item.status && item.status == 7 ? 'shine-box-green' : ''"
             v-bind:class="item.urgent ? 'shine-box-red' : ''"
           >
-          <img class="check-img" v-if="item.status && item.status == 7" src="../../static/imgPc/check.svg" alt="">
+            <img
+              class="check-img"
+              v-if="item.status && item.status == 7"
+              src="../../static/imgPc/check.svg"
+              alt=""
+            />
+            <div class="creatorName">{{ item.creatorName }}</div>
             <div class="checkIcon" v-show="item.checks != null">
               <img v-bind:src="'./static/imgPc/checkbg-icon.png'" alt />
               <span>查料</span>
@@ -20,6 +26,7 @@
             <div class="card-item-top">
               <div class="my_delivery">
                 <span class="item-num">NO.{{ item.number }}</span>
+                <img class="hammer" v-if="item.waixie" src="../../static/imgPc/hammer.png" alt="">
                 <div class="delivery" @click.stop="Bacmask(item.id)">
                   {{ item.shipName }}
                 </div>
@@ -44,6 +51,19 @@
                   :style="{ width: (1 - item.ratio) * 100 + '%' }"
                 ></div>
               </div>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Top Left 提示文字Top Left 提示文字Top Left 提示文字Top Left 提示文字"
+                placement="top-start"
+              >
+                <div class="progress-tags">
+                  <span class="tag">标签一</span>
+                  <span class="tag">标签二</span>
+                  <span class="tag">标签三</span>
+                </div>
+              </el-tooltip>
+
               <div>
                 <div
                   class="getTask"
@@ -359,6 +379,7 @@ export default {
 </script>
 
 <style scoped>
+
 /* 主要部分 */
 /* 卡片 */
 /* @-webkit-keyframes greenPulse {
@@ -442,6 +463,11 @@ export default {
   justify-content: space-between;
 }
 
+.hammer{
+  width: 29px;
+  height: 29px;
+}
+
 .delivery {
   background: #446cea;
   font-size: 14px;
@@ -470,7 +496,7 @@ export default {
 }
 
 .cards .card-item {
-  width: 200px;
+  width: 196px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.05);
   border-radius: 9px;
@@ -483,6 +509,14 @@ export default {
   position: relative;
 }
 
+.creatorName{
+  position: absolute;
+  left: 30px;
+  top: 3px;
+  color: #b2b2b2;
+  font-size: 14px;
+}
+
 .cards .card-item .card-item-top {
   width: 140px;
   height: 137px;
@@ -493,7 +527,7 @@ export default {
   border: 2px solid #57c47a;
   /* animation: glowGreen 500ms ease-out infinite alternate; */
 }
-.check-img{
+.check-img {
   position: absolute;
   width: 50%;
   top: 70px;
@@ -571,7 +605,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-break: keep-all;
-  width: 200px;
+  width: 196px;
 }
 
 .time-left {
@@ -725,10 +759,19 @@ export default {
 .taskReceive {
   width: 100%;
   text-align: center;
-  padding-top: 15px;
+  padding-top: 5px;
   font-weight: 800;
   color: rgba(178, 178, 178, 1);
   font-size: 13px;
+}
+.progress-tags {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.progress-tags .tag {
+  margin-right: 5px;
+  font-size: 12px;
+  color: #b2b2b2;
 }
 </style>
 <style>

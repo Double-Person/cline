@@ -103,7 +103,7 @@
       </div>
 
       <div class="uploadimg" v-show="false">
-        <el-upload ref="upload" :action="httppath" :headers="headertwo" list-type="picture-card" :on-preview="handlePictureCardPreview"
+        <el-upload ref="upload" :action="$httppath" :headers="headertwo" list-type="picture-card" :on-preview="handlePictureCardPreview"
           :on-success="handleAvatarSuccess" :on-remove="handleRemove" v-on:getImgUrl='AddInputUrl' class="uploadimg">
           <i class="el-icon-plus"></i>
         </el-upload>

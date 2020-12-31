@@ -12,6 +12,16 @@
           <span>LSIBSS支撑系统欢迎您,{{ userInfo.nickName }}</span>
         </div>
         <div class="header-right">
+          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(10)">
+            <span>加工进程管理</span>
+          </div>
+          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(11)"> 
+            <span>挤出进程管理</span>
+          </div>
+          <div style="margin: 0 20px 0 0; cursor: pointer">
+            <span>私款管理</span>
+          </div>
+
           <div
             style="margin: 0 20px 0 0; cursor: pointer"
             @click="linkTo(6)"
@@ -68,6 +78,8 @@
       <div class="custom-left">left</div>
 
       <div class="main" style="background: pink">
+        <slot name="title"> </slot>
+        <!-- 任务列表 -->
         <p class="title" v-if="model == 0">
           任务列表
           <span
@@ -106,6 +118,7 @@
         <span v-if="model==0" v-bind:class="query.giveOrGet?'':'active'" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(false)">我接取的</span>-->
         </p>
         <!-- <p class="title" v-if="model==0">任务列表 <span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'active':''" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(true)"> 我发布的</span><span v-if="model==0&&query.style==2" style="font-size: 16px">/</span><span v-if="model==0&&query.style==2" v-bind:class="query.giveOrGet?'':'active'" style="font-size: 16px;cursor: pointer;" @click="giveOrGetFuc(false)">我接取的</span></p> -->
+        <!-- 消息列表 -->
         <p class="title goodsManage" v-if="model == 1">
           <span class="title">消息列表</span>
           <button @click="changeVoice">修改音乐</button>
@@ -150,6 +163,8 @@
         </div>
         <p class="title" v-if="model == 8">新建采购</p>
 
+        <p class="title" v-if="model == 10">加工明细清单</p>
+
         <span v-if="model == 1" class="active">消息列表</span>
         <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
           任务列表
@@ -171,6 +186,15 @@
         <span v-if="model == 8" @click="linkTo(8)" style="cursor: pointer">
           物料采购
           <span class="active">->新建采购</span>
+        </span>
+
+         <span v-if="model == 10" @click="linkTo(10)" style="cursor: pointer">
+          <span class="active">加工明细清单</span>
+        </span>
+
+        <span v-if="model == 11" @click="linkTo(11)" style="cursor: pointer">
+          <span class="active">挤出进程管理</span>
+          <el-button type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
         </span>
 
         <!-- 页签部分 -->
@@ -419,6 +443,24 @@ export default {
             condition: false,
           },
         },
+        // 加工进程管理
+        {
+          id: 10,
+          name: "/process-management",
+          data: {
+            bookmark: false,
+            condition: false,
+          },
+        },
+         // 挤出进程管理
+        {
+          id: 11,
+          name: "/extrusion-process-management",
+          data: {
+            bookmark: false,
+            condition: false,
+          },
+        },
       ],
       query: {
         // /** 所有未完成 */
@@ -471,6 +513,10 @@ export default {
         addCharge: { value: 6 },
         schedule: { value: 7 },
         addProcurement: { value: 8 },
+
+
+        ProcessManagement: { value: 10 },
+        ExtrusionProcessManagement: { value: 11 },
       },
     };
   },
@@ -508,13 +554,15 @@ export default {
       // if (to.name == "addProcurement") {
       //   this.model = 8;
       // }
-
-      this.model = this.typeStatus[to.name].value;
+console.log('-------', to)
+      try {
+        
+        this.model = this.typeStatus[to.name].value;
+      } catch (error) {}
       if (to.name == "taskInfo") {
         this.condition.show = false;
         this.bookmark.show = false;
       }
-
       let names = [
         "message",
         "addTask",
@@ -524,11 +572,9 @@ export default {
         "schedule",
         "addProcurement",
       ];
-      if (names.includes("addTask")) {
-        this.indexLeft = false;
-      } else {
-        this.indexLeft = true;
-      }
+      let isIncludes = names.includes("addTask");
+      isIncludes ? (this.indexLeft = false) : (this.indexLeft = true);
+
       // if (
       //   to.name == "message" ||
       //   to.name == "addTask" ||
@@ -568,9 +614,7 @@ export default {
       this.newMessage();
     }, 1000 * 60 * 5);
   },
-  // mounted() {
 
-  // },
   destroy() {
     clearInterval(this.interval);
   },
@@ -854,9 +898,11 @@ export default {
         path: router[id].name,
         query: router[id].data,
       });
-      this.condition.show = router[id].data.condition;
-      this.bookmark.show = router[id].data.bookmark;
+      let { condition, bookmark } = router[id].data
+      this.condition.show = condition; //router[id].data.condition;
+      this.bookmark.show = bookmark; // router[id].data.bookmark;
     },
+
     changeData(id, dele) {
       var dateArr = this.dateArr;
       for (var i = 0; i < dateArr.length; i++) {
@@ -991,7 +1037,8 @@ export default {
 }
 
 .header-contain {
-  max-width: 1089px;
+  /* max-width: 1089px; */
+  max-width: 1300px;
   min-width: 752px;
   /* width: 55%; */
   height: 100%;

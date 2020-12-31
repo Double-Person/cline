@@ -7,7 +7,7 @@
       <div class="materielPic list">
           <span class="container-span">物料图片：</span>
           <el-upload class="avatar-uploader"
-           :action="httppath" :headers="header"
+           :action="$httppath" :headers="header"
             :show-file-list="true" 
             :on-success="handleAvatarSuccess" 
             :before-upload="beforeAvatarUpload"><img v-if="data.imageUrl" 

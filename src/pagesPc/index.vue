@@ -15,10 +15,10 @@
           <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(10)">
             <span>加工进程管理</span>
           </div>
-          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(11)"> 
+          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(11)">
             <span>挤出进程管理</span>
           </div>
-          <div style="margin: 0 20px 0 0; cursor: pointer">
+          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(12)">
             <span>私款管理</span>
           </div>
 
@@ -39,6 +39,23 @@
           >
             <span>任务安排</span>
           </div>
+
+          <div
+            style="margin: 0 20px 0 0; cursor: pointer"
+            @click="linkTo(13)"
+            v-show="userInfo.tasksPower"
+          >
+            <span>客户管理</span>
+          </div>
+          <div
+            style="margin: 0 20px 0 0; cursor: pointer"
+            @click="linkTo(14)"
+            v-show="userInfo.tasksPower"
+          >
+            <span>产品管理</span>
+          </div>
+
+
           <div class="message-div" @click="linkTo(0)">
             <img
               :src="'./static/imgPc/message-icon.png'"
@@ -75,7 +92,11 @@
       </div>
     </div>
     <div class="custom-contain">
-      <div class="custom-left">left</div>
+      <div class="custom-left">
+        {{ query.giveOrGet }} ==
+        <!-- 超时订单  被抄送的 -->
+        <timeout-orders v-if="query.giveOrGet == 4" />
+      </div>
 
       <div class="main" style="background: pink">
         <slot name="title"> </slot>
@@ -165,6 +186,10 @@
 
         <p class="title" v-if="model == 10">加工明细清单</p>
 
+        <p class="title" v-if="model == 12">客户私款查询</p>
+        <p class="title" v-if="model == 13">客户管理</p>
+        <p class="title" v-if="model == 14">产品管理</p>
+
         <span v-if="model == 1" class="active">消息列表</span>
         <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
           任务列表
@@ -188,14 +213,13 @@
           <span class="active">->新建采购</span>
         </span>
 
-         <span v-if="model == 10" @click="linkTo(10)" style="cursor: pointer">
+        <span v-if="model == 10" @click="linkTo(10)" style="cursor: pointer">
           <span class="active">加工明细清单</span>
         </span>
 
-        <span v-if="model == 11" @click="linkTo(11)" style="cursor: pointer">
-          <span class="active">挤出进程管理</span>
-          <el-button type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
-        </span>
+        
+
+        
 
         <!-- 页签部分 -->
         <div class="bookmark-div" v-show="bookmark.show">
@@ -252,7 +276,7 @@
                         </div>
                     </div>
 
-        </div>-->
+        </div> -->
           <div class="index-right">
             <div class="condition" v-show="condition.show">
               <div class="urgent-condition">
@@ -337,7 +361,10 @@
   </div>
 </template>
 <script>
+import TimeoutOrders from "./TimeoutOrders.vue";
+
 export default {
+  components: { TimeoutOrders },
   data() {
     return {
       haveNewMessage: false,
@@ -452,7 +479,7 @@ export default {
             condition: false,
           },
         },
-         // 挤出进程管理
+        // 挤出进程管理
         {
           id: 11,
           name: "/extrusion-process-management",
@@ -461,6 +488,35 @@ export default {
             condition: false,
           },
         },
+        // 私款管理
+        {
+          id: 12,
+          name: "/private-money",
+          data: {
+            bookmark: false,
+            condition: false,
+          },
+        },
+         // 客户管理
+        {
+          id: 13,
+          name: "/customer-management",
+          data: {
+            bookmark: false,
+            condition: false,
+          },
+        },
+         // 产品管理
+        {
+          id: 14,
+          name: "/product-management",
+          data: {
+            bookmark: false,
+            condition: false,
+          },
+        },
+
+
       ],
       query: {
         // /** 所有未完成 */
@@ -492,7 +548,7 @@ export default {
         userId: 0,
         keywords: "",
       },
-      model: 0,
+
       mask: false,
       voiceMask: false,
       datePage: 0,
@@ -502,21 +558,26 @@ export default {
       interval: "",
       searchText: "",
       timerId: "",
-
+      // 0 任务安排  7 物料生产进度
+      model: 0,
       typeStatus: {
-        task: { value: 0 },
+        task: { value: 0 }, // 任务安排
         message: { value: 1 },
         taskInfo: { value: 2 },
         feedBack: { value: 3 },
         addTask: { value: 4 },
         getCharge: { value: 5 },
         addCharge: { value: 6 },
-        schedule: { value: 7 },
+        schedule: { value: 7 }, // 物料生产进度
         addProcurement: { value: 8 },
 
+        ProcessManagement: { value: 10 }, // 加工进程管理
+        ExtrusionProcessManagement: { value: 11 }, // 挤出进程管理
+        PrivateMoney: { value: 12 }, // 私款管理
+        CustomerManagement: { value: 13 }, // 客户管理
+        ProductManagement: { value: 14 }, // 产品管理
 
-        ProcessManagement: { value: 10 },
-        ExtrusionProcessManagement: { value: 11 },
+        
       },
     };
   },
@@ -554,9 +615,8 @@ export default {
       // if (to.name == "addProcurement") {
       //   this.model = 8;
       // }
-console.log('-------', to)
+      console.log("-------", to);
       try {
-        
         this.model = this.typeStatus[to.name].value;
       } catch (error) {}
       if (to.name == "taskInfo") {
@@ -898,7 +958,7 @@ console.log('-------', to)
         path: router[id].name,
         query: router[id].data,
       });
-      let { condition, bookmark } = router[id].data
+      let { condition, bookmark } = router[id].data;
       this.condition.show = condition; //router[id].data.condition;
       this.bookmark.show = bookmark; // router[id].data.bookmark;
     },
@@ -1027,18 +1087,18 @@ console.log('-------', to)
 .header {
   position: sticky;
   top: 0;
-  z-index: 3;
+  z-index: 1;
 }
 .title {
   position: sticky;
   top: 61px;
   background: rgb(240, 241, 243);
-  z-index: 3;
+  /* z-index: 1; */
 }
 
 .header-contain {
   /* max-width: 1089px; */
-  max-width: 1300px;
+  max-width: 1400px;
   min-width: 752px;
   /* width: 55%; */
   height: 100%;
@@ -1124,7 +1184,7 @@ console.log('-------', to)
   position: absolute;
   right: 0;
   top: 58px;
-  z-index: 99;
+  z-index: 999 !important;
   display: flex;
   justify-content: center;
   align-items: center;

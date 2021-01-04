@@ -1,54 +1,20 @@
 <template>
-  <el-dialog title="" :visible.sync="dialogFormVisible">
+  <el-dialog title="新建客户私款基本信息管理" :visible.sync="dialogFormVisible">
     <el-form
       :model="dynamicValidateForm"
       ref="dynamicValidateForm"
       label-width="150px"
       class="demo-dynamic"
     >
-      <el-form-item prop="time1" label="预计交期">
-        <el-date-picker
-          type="date"
-          placeholder="选择日期"
-          v-model="dynamicValidateForm.time1"
-          style="width: 100%"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item prop="time2" label="订单交期">
-        <el-date-picker
-          disabled
-          type="date"
-          placeholder="选择日期"
-          v-model="dynamicValidateForm.time2"
-          style="width: 100%"
-        ></el-date-picker>
-      </el-form-item>
+      
 
-      <el-form-item prop="name" label="名称">
-        <el-input disabled v-model="dynamicValidateForm.name"></el-input>
+      <el-form-item prop="name" label="客户名称">
+        <el-input v-model="dynamicValidateForm.name"></el-input>
       </el-form-item>
-      <el-form-item prop="orderNum" label="订单号">
+      <el-form-item prop="orderNum" label="客户型号">
         <el-input v-model="dynamicValidateForm.orderNum"></el-input>
       </el-form-item>
-      <el-form-item prop="type" label="材料型号">
-        <el-input v-model="dynamicValidateForm.type"></el-input>
-      </el-form-item>
-
-      <el-form-item
-        class="add-row"
-        v-for="(domain, index) in dynamicValidateForm.domains"
-        :label="'长度' + index"
-        :key="domain.key"
-        :prop="'domains.' + index + '.value1'"
-      >
-        <el-input style="width: 200px" v-model="domain.value1"></el-input>
-        数量：
-        <el-input style="width: 200px" v-model="domain.value2"></el-input>
-        <el-button @click.prevent="removeDomain(domain)">删除</el-button>
-        <el-button @click.prevent="addDomain" v-if="index == 0"
-          >新增域名</el-button
-        >
-      </el-form-item>
+         
 
       <el-form-item prop="imageUrl" label="上传加工规格图">
         <el-upload
@@ -71,9 +37,28 @@
         </el-upload>
       </el-form-item>
 
+      <el-form-item prop="type" label="颜色">
+        <el-input v-model="dynamicValidateForm.type"></el-input>
+      </el-form-item>
+      <el-form-item prop="type" label="模具费用">
+        <el-input v-model="dynamicValidateForm.type"></el-input>
+      </el-form-item>
+      <el-form-item prop="type" label="单价">
+        <el-input v-model="dynamicValidateForm.type"></el-input>
+      </el-form-item>
+      <el-form-item prop="type" label="MOQ">
+        <el-input v-model="dynamicValidateForm.type"></el-input>
+      </el-form-item>
+      <el-form-item prop="type" label="其他说明">
+        <el-input v-model="dynamicValidateForm.type"></el-input>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="submitForm('dynamicValidateForm')"
           >提交</el-button
+        >
+        <el-button @click="resetForm('dynamicValidateForm')"
+          >重新输入</el-button
         >
       </el-form-item>
     </el-form>
@@ -82,21 +67,14 @@
 
 <script>
 export default {
-  name: "ProcessManagementEdit",
+  name: "PrivateMoneyEdit",
   data() {
     return {
       authorization: "",
       header: {},
       dialogFormVisible: false,
       dynamicValidateForm: {
-        domains: [
-          {
-            value1: "",
-            value2: "",
-          },
-        ],
-        time1: "",
-        time2: "2020-11-30",
+       
         name: "",
         orderNum: "",
         type: "",
@@ -110,7 +88,6 @@ export default {
   methods: {
     openDialo() {
       this.dialogFormVisible = true;
-      console.log(this.$parent.selectRow);
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -122,20 +99,10 @@ export default {
         }
       });
     },
+     resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
 
-    removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
-      if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
-      }
-    },
-    addDomain() {
-      this.dynamicValidateForm.domains.push({
-        value1: "",
-        value2: "",
-        key: Date.now(),
-      });
-    },
     //上传物料图片
     handleAvatarSuccess(res, file) {
       // console.log(res)
@@ -169,15 +136,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../static/css/upLoadFile.scss";
-.warp {
-  .add-row {
-    display: flex;
-    align-items: center;
-    /deep/ .el-form-item__content {
-      margin-left: 0px !important;
-    }
+
+  
+  .drawings {
+    height: 10px;
+    font-size: 9px;
+    -webkit-text-size-adjust: none;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    text-decoration: underline;
+    color: #446cea;
+    line-height: 38px;
   }
 
-}
+  .avatar-uploader{
+        display: inline-block;
+        border: 1px dashed #d9d9d9;
+    }
+    .avatar-uploader:hover{
+        border: 1px dashed #409EFF;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+
 </style>

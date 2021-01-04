@@ -27,6 +27,17 @@
         </div>
       </div>
       <div>
+        <span>客户查找:</span>
+        <el-select v-model="query.charge" placeholder="请选择" @change="changeType">
+          <el-option
+            v-for="item in charge"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div>
         <span>任务状态:</span>
         <el-select v-model="query.charge" placeholder="请选择" @change="changeType">
           <el-option
@@ -158,7 +169,7 @@
     </div>
 
     <div class="alert-div" style="height: 350px" v-show="moneyShow">
-      <span style="margin: 49px 0 0 430px;display: block;color: #BBBBBB" @click="moneyCancel">取消</span>
+      <span style="margin: 49px 0 0 430px;display: block;color: #BBBBBB;" @click="moneyCancel">取消</span>
       <div class="alert-div-item">
         <span>应收</span>
         <div class="money">
@@ -430,8 +441,10 @@ export default {
 }
 
 .alert-div {
-  position: absolute;
-  top: 200px;
+  /* position: absolute; */
+  position: fixed;
+  /* top: 200px; */
+  top: 400px;
   left: 50%;
   margin: -166px 0 0 -260px;
   width: 520px;

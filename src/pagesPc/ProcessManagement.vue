@@ -27,7 +27,7 @@
 
       <el-table-column fixed="right" width="150" label="操作">
         <template slot-scope="scope">
-          <div class="draeing-warp">
+          <div class="drawings">
             <div
               class="drawing edit"
               @click="drawings(scope.$index, scope.row)"
@@ -93,29 +93,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.warp {
-  .draeing-warp {
-    display: flex;
-    justify-content: space-between;
-  }
-  .drawing {
-    font-size: 9px;
-    -webkit-text-size-adjust: none;
-    -ms-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    font-weight: 400;
-    text-decoration: underline;
-    color: #446cea;
-    cursor: pointer;
-  }
-  .edit {
-    color: #446cea;
-  }
-  .start {
-    color: #21d709;
-  }
-  .statement {
-    color: #ff9c00;
-  }
-}
+@import '../../static/css/common.scss';
+
 </style>

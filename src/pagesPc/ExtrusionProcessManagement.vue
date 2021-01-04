@@ -1,5 +1,11 @@
 <template>
   <div class="warp">
+    <span style="cursor: pointer">
+          <span class="active">挤出进程管理</span>
+          <el-button type="primary"
+            >新增<i class="el-icon-plus el-icon--right"></i
+          ></el-button>
+        </span>
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="date" width="100" label="日期">
       </el-table-column>
@@ -27,7 +33,7 @@
 
       <el-table-column fixed="right" width="150" label="操作">
         <template slot-scope="scope">
-          <div class="draeing-warp">
+          <div class="drawings">
             <div
               class="drawing edit"
               @click="drawings(scope.$index, scope.row)"
@@ -93,29 +99,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.warp {
-  .draeing-warp {
-    display: flex;
-    justify-content: space-between;
-  }
-  .drawing {
-    font-size: 9px;
-    -webkit-text-size-adjust: none;
-    -ms-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    font-weight: 400;
-    text-decoration: underline;
-    color: #446cea;
-    cursor: pointer;
-  }
-  .edit {
-    color: #446cea;
-  }
-  .start {
-    color: #21d709;
-  }
-  .statement {
-    color: #ff9c00;
-  }
-}
+@import '../../static/css/common.scss';
 </style>

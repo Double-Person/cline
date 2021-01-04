@@ -1,0 +1,65 @@
+// 二级标题激活
+.active {
+    color: #446cea;
+    // color: red;
+    cursor: pointer;
+}
+
+// 二级标题
+.sub-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/deep/ .btn {
+    background: #446bec;
+    border-radius: 3px;
+    margin-left: 15px;
+    span {
+        color: #fff;
+    }
+}
+
+// 搜索
+.search {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    .label {
+        font-size: 9px;
+        text-size-adjust: none;
+        color: #425bad;
+        line-height: 24px;
+        width: 100px;
+        text-align: right;
+    }
+}
+
+.drawing {
+    font-size: 9px;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    font-weight: 400;
+    text-decoration: underline;
+    color: #446cea;
+    cursor: pointer;
+}
+
+.drawings {
+    display: flex;
+    justify-content: space-between;
+    .edit {
+        color: #446cea;
+    }
+    .del {
+        color: red;
+    }
+    .start {
+        color: #21d709;
+    }
+    .statement {
+        color: #ff9c00;
+    }
+}

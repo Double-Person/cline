@@ -16,6 +16,11 @@ import addChargePc from '@/pagesPc/addCharge'
 import schedule from '@/pagesPc/schedule'
 import ProcessManagement from '@/pagesPc/ProcessManagement'   // 加工进程管理 
 import ExtrusionProcessManagement from '@/pagesPc/ExtrusionProcessManagement'   // 挤出进程管理 
+import PrivateMoney from '@/pagesPc/PrivateMoney'   // 私款管理 
+import CustomerManagement from '@/pagesPc/CustomerManagement'   // 客户管理 
+import ProductManagement from '@/pagesPc/ProductManagement'   // 产品管理 
+
+
 
 
 import addProcurement from '@/pagesPc/addProcurement'
@@ -113,8 +118,20 @@ if (window.innerWidth > 800) {
                 path: '/extrusion-process-management',  // 挤出进程管理
                 name: 'ExtrusionProcessManagement',
                 component: ExtrusionProcessManagement
+            },{
+                path: '/private-money',  // 私款管理
+                name: 'PrivateMoney',
+                component: PrivateMoney
+            },{
+                path: '/customer-management',  // 客户管理
+                name: 'CustomerManagement',
+                component: CustomerManagement
+            },{
+                path: '/product-management',  // 产品管理
+                name: 'ProductManagement',
+                component: ProductManagement
             }
-        
+            
             
         ]
         }, {

@@ -27,6 +27,7 @@
               <div class="my_delivery">
                 <span class="item-num">NO.{{ item.number }}</span>
                 <img class="hammer" v-if="item.waixie" src="../../static/imgPc/hammer.png" alt="">
+                <img class="hammer" src="../../static/imgPc/logs.png" alt="">
                 <div class="delivery" @click.stop="Bacmask(item.id)">
                   {{ item.shipName }}
                 </div>
@@ -511,15 +512,17 @@ export default {
 
 .creatorName{
   position: absolute;
-  left: 30px;
+  left: 17px;
   top: 3px;
   color: #b2b2b2;
   font-size: 14px;
 }
 
 .cards .card-item .card-item-top {
-  width: 140px;
-  height: 137px;
+  /* width: 140px; */
+  width: 160px;
+  /* height: 137px; */
+  height: 150px;
   padding: 15px 30px;
 }
 

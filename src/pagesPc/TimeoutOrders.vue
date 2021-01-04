@@ -5,12 +5,19 @@
       <li v-for="item in timeOrder" :key="item.id">
         <span>{{ item.time }}</span>
         <span>{{ item.title }}</span>
-        <span>查看订单</span>
+        <span class="view-order">查看订单</span>
       </li>
     </ul>
     <!-- 分页显示 -->
-    <div>
-      <el-pagination layout="prev, pager, next" :total="50"  @current-change="handleCurrentChange"> </el-pagination>
+    <div class="pagination">
+      <el-pagination
+
+        layout="prev, pager, next"
+        :total="150"
+        :pager-count="5"
+        @current-change="handleCurrentChange"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -27,10 +34,10 @@ export default {
     };
   },
   methods: {
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
-  }
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
 };
 </script>
 
@@ -38,12 +45,35 @@ export default {
 .time-out-order {
   width: 100%;
   .time-out-order-title {
-    font-size: 16px;
+    font-size: 12px;
+    text-size-adjust: none;
+    color: #000000;
+    line-height: 24px;
+    text-align: center;
+    margin: 10px 0 13px 0;
   }
   .time-out-order-list {
     li {
       display: flex;
       justify-content: space-between;
+      span {
+        color: #747474;
+        font-size: 9px;
+        text-size-adjust: none;
+      }
+      span.view-order {
+        color: #5f82f7;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .pagination{
+    margin-top: 15px;
+    width: 80%;
+    .el-pagination{
+      padding: 0;
+      width: 90%;
     }
   }
 }

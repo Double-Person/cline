@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <div class="sub-title">
       <div>
         <span class="active">产品管理</span>
@@ -9,6 +10,8 @@
       </div>
     </div>
 
+    
+
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="date" label="序号"> </el-table-column>
       <el-table-column prop="date" label="产品编号"> </el-table-column>
@@ -17,7 +20,7 @@
           <div class="drawings">
             <div
               class="drawing edit"
-              @click="drawings(scope.$index, scope.row)"
+              @click="previewImg(scope.row.img)"
             >
               点击查看
             </div>
@@ -40,13 +43,16 @@
     </el-table>
 
     <product-management-edit ref="productManagementEdit" />
+
+    <preview-picture ref="previewPicture" />
   </div>
 </template>
 
 <script>
+import PreviewPicture from '../components/PreviewPicture.vue';
 import ProductManagementEdit from './ProductManagementEdit.vue';
 export default {
-  components: { ProductManagementEdit },
+  components: { ProductManagementEdit, PreviewPicture },
   name: "ProductManagement",
   data() {
     return {
@@ -55,21 +61,27 @@ export default {
           date: "2016-05-02",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄",
+          img: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
         },
         {
           date: "2016-05-04",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1517 弄",
+           img: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
         },
         {
           date: "2016-05-01",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1519 弄",
+           img: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg'
         },
       ],
     };
   },
   methods: {
+    previewImg(img) {
+      this.$refs.previewPicture.previewImg(img)
+    },
     drawings(index, row) {
       console.log(index, row);
       this.$refs.productManagementEdit.openDialo()

@@ -19,10 +19,14 @@ import 'quill/dist/quill.snow.css'
 
 import 'quill/dist/quill.bubble.css'
 
+import PreviewPicture from "./components/PreviewPicture.vue"
+
+Vue.use(PreviewPicture)
 
 
-Vue.use(VueQuillEditor, /* { default global options } */)
-//富文本区域
+
+Vue.use(VueQuillEditor, /* { default global options } */ )
+    //富文本区域
 
 
 // 封装区域
@@ -34,7 +38,7 @@ Vue.prototype.$http = new Http();
 
 Vue.prototype.$cookie = new Cookie();
 Vue.config.productionTip = false
-// Vue.prototype.$httppath = "http://www.lsibss.com:8080/tasks/api/purchase/saveImage";
+    // Vue.prototype.$httppath = "http://www.lsibss.com:8080/tasks/api/purchase/saveImage";
 Vue.prototype.$httppath = "http://yflh.hkzhtech.com/tasks/api/purchase/saveImage";
 
 

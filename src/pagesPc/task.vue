@@ -55,13 +55,12 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                content="Top Left 提示文字Top Left 提示文字Top Left 提示文字Top Left 提示文字"
+                :content="item.steps && item.steps.join('，')"
                 placement="top-start"
               >
-                <div class="progress-tags">
-                  <span class="tag">标签一</span>
-                  <span class="tag">标签二</span>
-                  <span class="tag">标签三</span>
+         
+                 <div class="progress-tags" >
+                  <span class="tag" v-for='(step, indey) in item.steps' :key="indey">{{ step }}</span>           
                 </div>
               </el-tooltip>
 
@@ -251,7 +250,9 @@ export default {
         type: 1,
         userId: this.query.userId,
         keywords: this.query.keywords,
+        searchText: this.query.keywords,
       };
+             
       // console.log(this.query.giveOrGet)
       if (this.query.giveOrGet == 1) {
         params.type = 11;
@@ -516,6 +517,7 @@ export default {
   top: 3px;
   color: #b2b2b2;
   font-size: 14px;
+  text-decoration: underline;
 }
 
 .cards .card-item .card-item-top {
@@ -770,11 +772,14 @@ export default {
 .progress-tags {
   overflow: hidden;
   white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
 }
 .progress-tags .tag {
   margin-right: 5px;
   font-size: 12px;
   color: #b2b2b2;
+  flex: 1;
 }
 </style>
 <style>

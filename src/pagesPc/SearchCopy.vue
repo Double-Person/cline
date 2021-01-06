@@ -1,13 +1,18 @@
 <template>
-  <div class="contain">
+  <div class="list contain" v-infinite-scroll="load"
+          infinite-scroll-disabled="disabled">
     <!-- 目前时间参数不传会报错 -->
     <!-- 主要内容 -->
     <div class="main">
       <div class="main-right">
-        <div class="cards">
+        <div
+          class="list cards"
+          v-infinite-scroll="load"
+          infinite-scroll-disabled="disabled"
+        >
           <div
             class="card-item"
-            v-for="(item, index) in cards.list"
+            v-for="(item, index) in cards"
             :key="item.index"
             @click.stop="cardInfo(item.id)"
             v-bind:id="item.status && item.status == 7 ? 'shine-box-green' : ''"
@@ -61,13 +66,11 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                content="Top Left 提示文字Top Left 提示文字Top Left 提示文字Top Left 提示文字"
+                :content="item.steps && item.steps.join('，')"
                 placement="top-start"
               >
-                <div class="progress-tags">
-                  <span class="tag">标签一</span>
-                  <span class="tag">标签二</span>
-                  <span class="tag">标签三</span>
+               <div class="progress-tags" >
+                  <span class="tag" v-for='(step, indey) in item.steps' :key="indey">{{ step }}</span>           
                 </div>
               </el-tooltip>
 
@@ -114,6 +117,9 @@
             </div>
           </div>
         </div>
+
+        <p v-if="loading" class="tips">加载中...</p>
+        <p v-if="noMore" class="tips">没有更多了</p>
       </div>
     </div>
   </div>
@@ -124,6 +130,8 @@ export default {
   name: "SearchCopy",
   data() {
     return {
+      totalRow: -1,
+      loading: false,
       query: {
         id: 1,
         style: 1, //1 任务 2 我的
@@ -142,10 +150,24 @@ export default {
   },
   created() {
     console.log(this.$route.query);
+    this.query = this.$route.query;
+    this.query.time = ''
     this.getData();
   },
+  computed: {
+    noMore() {
+      return this.cards.length == this.totalRow;
+    },
+    disabled() {
+      return this.loading || this.noMore;
+    },
+  },
   methods: {
-      packup(index) {
+    load() {
+      this.loading = true;
+      this.getData();
+    },
+    packup(index) {
       // console.log(index);
       this.upindex[index] === index
         ? this.$set(this.upindex, index, "")
@@ -165,23 +187,26 @@ export default {
     getData() {
       var params = {
         urgent: this.query.urgent,
-        time: this.query.time,
-        page: this.page,
+        time: "", //this.query.time,
+        pageNumber: this.page,
+        mPageSize: 18,
         type: 12,
         userId: this.query.userId,
         keywords: this.query.keywords,
+        searchText: this.query.keywords,
       };
+      console.log(params)
       // console.log(this.query.giveOrGet)
-      if (this.query.giveOrGet == 1) {
+      if (this.query.giveOrGet == 1) {  // 我发布的
         params.type = 11;
         this.taskIssuer = true;
-      } else if (this.query.giveOrGet == 2) {
+      } else if (this.query.giveOrGet == 2) {  //  我接受的
         params.type = 10;
         this.taskIssuer = false;
-      } else if (this.query.giveOrGet == 3) {
+      } else if (this.query.giveOrGet == 3) {  // 待接收的
         params.type = 12;
         this.taskIssuer = false;
-      } else {
+      } else {  // 被抄送的
         params.type = 13;
         this.taskIssuer = true;
       }
@@ -200,7 +225,11 @@ export default {
                 item.shipName = "自取";
               }
             });
-            this.cards = res.data;
+            // this.cards = res.data
+            this.cards.push(...res.data.list);
+            this.totalRow = res.data.totalRow;
+            this.loading = false;
+            this.page += 1;
             console.log(this.cards, "---");
           }
           // this.$router.push({path:'/'})
@@ -217,6 +246,13 @@ export default {
   justify-content: space-between;
   font-size: 12px;
 }
+.tips{
+  text-align: center;
+  padding: 20px;
+}
+.main-right{
+  border: 2px solid #c0c4cc;
+}
 
 .contain {
   width: 1300px;
@@ -225,9 +261,13 @@ export default {
   overflow-x: hidden;
   /* overflow-y: auto; */
 }
-.contain::-webkit-scrollbar { width: 0 !important }
-.contain{ -ms-overflow-style: none; overflow: -moz-scrollbars-none; }
-
+.contain::-webkit-scrollbar {
+  width: 0 !important;
+}
+.contain {
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
 
 .my_delivery {
   display: flex;
@@ -292,7 +332,7 @@ export default {
   /* width: 140px; */
   width: 160px;
   /* height: 137px; */
-  height: 150px;
+  height: 155px;
   padding: 15px 30px;
 }
 
@@ -540,6 +580,8 @@ export default {
 .progress-tags {
   overflow: hidden;
   white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
 }
 .progress-tags .tag {
   margin-right: 5px;

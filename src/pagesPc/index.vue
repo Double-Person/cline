@@ -55,7 +55,6 @@
             <span>产品管理</span>
           </div>
 
-
           <div class="message-div" @click="linkTo(0)">
             <img
               :src="'./static/imgPc/message-icon.png'"
@@ -216,10 +215,6 @@
         <span v-if="model == 10" @click="linkTo(10)" style="cursor: pointer">
           <span class="active">加工明细清单</span>
         </span>
-
-        
-
-        
 
         <!-- 页签部分 -->
         <div class="bookmark-div" v-show="bookmark.show">
@@ -497,7 +492,7 @@ export default {
             condition: false,
           },
         },
-         // 客户管理
+        // 客户管理
         {
           id: 13,
           name: "/customer-management",
@@ -506,7 +501,7 @@ export default {
             condition: false,
           },
         },
-         // 产品管理
+        // 产品管理
         {
           id: 14,
           name: "/product-management",
@@ -515,8 +510,6 @@ export default {
             condition: false,
           },
         },
-
-
       ],
       query: {
         // /** 所有未完成 */
@@ -576,8 +569,6 @@ export default {
         PrivateMoney: { value: 12 }, // 私款管理
         CustomerManagement: { value: 13 }, // 客户管理
         ProductManagement: { value: 14 }, // 产品管理
-
-        
       },
     };
   },
@@ -932,6 +923,12 @@ export default {
       }
     },
     isSearch() {
+      let routeUrl = this.$router.resolve({
+        path: "/search-copy",
+        query: this.query, // query.keywords
+      });
+      window.open(routeUrl.href, "_blank");
+      return false;
       if (this.query.giveOrGet == 4) {
         let routeUrl = this.$router.resolve({
           path: "/search-copy",
@@ -1098,7 +1095,7 @@ export default {
 
 .header-contain {
   /* max-width: 1089px; */
-  max-width: 1400px;
+  max-width: 1600px;
   min-width: 752px;
   /* width: 55%; */
   height: 100%;

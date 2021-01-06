@@ -3,15 +3,16 @@ import Cookie from '@/assets/commonReq/cookie.js'
 
 // const baseURI="http://127.0.0.1:8080/tasks"
 // const baseURI="http://www.lsibss.com:8080/tasks"
-const baseURI="http://yflh.hkzhtech.com/tasks"
+// const baseURI = "http://yflh.hkzhtech.com/tasks"
+const baseURI = "http://192.168.0.116:8080/tasks"
 
 
-axios.defaults.baseURI=baseURI
-axios.defaults.headers.common['Access-Control-Allow-Origin']="*"
-/**
- * 基于axios的公用http请求
- * 包含重复请求的取消
- */
+axios.defaults.baseURI = baseURI
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*"
+    /**
+     * 基于axios的公用http请求
+     * 包含重复请求的取消
+     */
 class Http {
     constructor() {
         const vm = this
@@ -20,10 +21,10 @@ class Http {
             // vm.baseURI = process.env.NODE_ENV === 'production' ? 'http://45.40.203.41:8080/tasks' : '/API'
             // vm.baseURI = 'http://192.168.0.112:8080/tasks'
             // vm.baseURI = 'http://192.168.0.120:8080/tasks'
-        // vm.baseURI = 'https://www.hemingbi.com/tasks'
+            // vm.baseURI = 'https://www.hemingbi.com/tasks'
             // vm.baseUrl = 'http://127.0.0.1:8080/tasks'
             // vm.baseUrl = 'http://www.lsibss.com:8080/tasks'
-            vm.baseURI= baseURI
+        vm.baseURI = baseURI
             // vm.baseURI = '/API'
             // console.log(process.env,process.env.BASE_URL)
         var myCookie = new Cookie();
@@ -31,7 +32,7 @@ class Http {
         // axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? '' : '' //默认路径,区别生产和线上环境
 
         // axios.defaults.headers.common['Authorization'] = myCookie.get("Authorization") //token
-        axios.defaults.timeout = 5000
+        axios.defaults.timeout = 10000 //5000
             // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
             // request 拦截器
         axios.interceptors.request.use(

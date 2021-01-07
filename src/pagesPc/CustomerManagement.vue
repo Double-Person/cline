@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="nav-title">客户管理</div>
     <div class="sub-title">
       <div>
         <span class="active">客户管理</span>

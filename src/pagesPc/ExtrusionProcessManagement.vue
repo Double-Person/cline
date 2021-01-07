@@ -1,14 +1,16 @@
 <template>
   <div class="warp">
-    <span style="cursor: pointer">
-          <span class="active">挤出进程管理</span>
-          <el-button type="primary"
-            >新增<i class="el-icon-plus el-icon--right"></i
-          ></el-button>
-        </span>
+    <div class="nav-title">挤出进程管理</div>
+    <div class="sub-title">
+      <div>
+        <span class="active">挤出进程管理</span>
+        <el-button type="primary" class="btn"
+          >新增<i class="el-icon-plus el-icon--right"></i
+        ></el-button>
+      </div>
+    </div>
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="date" width="100" label="日期">
-      </el-table-column>
+      <el-table-column prop="date" width="100" label="日期"> </el-table-column>
       <el-table-column prop="date" width="100" label="订单流水号">
       </el-table-column>
       <el-table-column prop="name" label="客户"> </el-table-column>
@@ -99,5 +101,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../static/css/common.scss';
+@import "../../static/css/common.scss";
 </style>

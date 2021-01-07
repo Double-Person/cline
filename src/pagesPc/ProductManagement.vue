@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+    <div class="nav-title">产品管理</div>
     <div class="sub-title">
       <div>
         <span class="active">产品管理</span>

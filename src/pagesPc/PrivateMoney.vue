@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="nav-title">客户私款查询</div>
     <div class="sub-title">
       <div>
         <span class="active">客户私款查询</span>

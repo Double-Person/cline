@@ -2,15 +2,49 @@
   <div class="contain">
     <div class="button-div">
       <button class="abled" @click="blankingLog">切料日志</button>
+      <button class="abled" @click="checkFigure">查看产品图样</button>
       <!-- <button @click="amendTasks" class="amend">修改任务</button> -->
-      
-      <button @click="amendTasks" v-if="data.canUpdate" :class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
-      <button @click="revokeTasks" v-if="data.canRevoke" :class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
-      <button @click="feedBack" v-if="data.canFeedback" :class="data.canFeedback==true?'abled':'disabled'" >物料反馈</button>
+
+      <button
+        @click="amendTasks"
+        v-if="data.canUpdate"
+        :class="data.canUpdate == true ? 'abled' : 'disabled'"
+      >
+        修改任务
+      </button>
+      <button
+        @click="revokeTasks"
+        v-if="data.canRevoke"
+        :class="data.canRevoke == true ? 'abled' : 'disabled'"
+      >
+        撤回任务
+      </button>
+      <button
+        @click="feedBack"
+        v-if="data.canFeedback"
+        :class="data.canFeedback == true ? 'abled' : 'disabled'"
+      >
+        物料反馈
+      </button>
       <!-- <button v-if="!data.canAccept">修改任务</button> -->
-      <button v-if="!data.canUpdate" :class="data.canUpdate==true?'abled':'disabled'">修改任务</button>
-      <button v-if="!data.canRevoke" :class="data.canRevoke==true?'abled':'disabled'">撤回任务</button>
-      <button v-if="!data.canFeedback" :class="data.canFeedback==true?'abled':'disabled'">物料反馈</button>
+      <button
+        v-if="!data.canUpdate"
+        :class="data.canUpdate == true ? 'abled' : 'disabled'"
+      >
+        修改任务
+      </button>
+      <button
+        v-if="!data.canRevoke"
+        :class="data.canRevoke == true ? 'abled' : 'disabled'"
+      >
+        撤回任务
+      </button>
+      <button
+        v-if="!data.canFeedback"
+        :class="data.canFeedback == true ? 'abled' : 'disabled'"
+      >
+        物料反馈
+      </button>
     </div>
     <div class="main">
       <div>
@@ -18,7 +52,7 @@
           <span>客户名称：</span>
         </div>
         <div>
-          <span>{{data.name}}</span>
+          <span>{{ data.name }}</span>
         </div>
       </div>
       <div>
@@ -27,9 +61,9 @@
         </div>
         <div>
           <span style="color: #000000">
-            {{data.createTime}}
-            <span style="margin: 0 22px;color:#333333">至</span>
-            {{data.endTime}}
+            {{ data.createTime }}
+            <span style="margin: 0 22px; color: #333333">至</span>
+            {{ data.endTime }}
           </span>
         </div>
       </div>
@@ -39,7 +73,13 @@
         </div>
         <div
           v-html="data.describes"
-          style="word-wrap: break-word;overflow: scroll;width: 1000px;height: 400px;margin-top:7px;"
+          style="
+            word-wrap: break-word;
+            overflow: scroll;
+            width: 1000px;
+            height: 400px;
+            margin-top: 7px;
+          "
         ></div>
       </div>
       <div>
@@ -47,7 +87,7 @@
           <span>任务价格：</span>
         </div>
         <div>
-          <span>{{data.price}} 元</span>
+          <span>{{ data.price }} 元</span>
         </div>
       </div>
       <div>
@@ -55,26 +95,41 @@
           <span>任务环节：</span>
         </div>
         <div>
-          <div v-for="(item,index) in data.steps" :key="index">
+          <div v-for="(item, index) in data.steps" :key="index">
             <div class="step-circle">
               <img
-                v-bind:src="item.endStatus==1?'./static/imgPc/step-true-icon.png':'./static/imgPc/step-false-icon.png'"
+                v-bind:src="
+                  item.endStatus == 1
+                    ? './static/imgPc/step-true-icon.png'
+                    : './static/imgPc/step-false-icon.png'
+                "
                 alt
               />
-              <span>{{item.name}}</span>
+              <span>{{ item.name }}</span>
               <span
                 class="finishTask"
-                v-bind:id="item.endStatus==2?'canClick':'cantClick'"
-                @click="endStatus(item.endStatus,item.id,item.name.substring(2))"
-                v-if="item.endStatus!=1"
-              >{{item.endStatusText=="未完成"?"点击完成":item.endStatusText}}</span>
+                v-bind:id="item.endStatus == 2 ? 'canClick' : 'cantClick'"
+                @click="
+                  endStatus(item.endStatus, item.id, item.name.substring(2))
+                "
+                v-if="item.endStatus != 1"
+                >{{
+                  item.endStatusText == "未完成"
+                    ? "点击完成"
+                    : item.endStatusText
+                }}</span
+              >
             </div>
-            <div class="step-line" v-if="index!=data.steps.length-1">
+            <div class="step-line" v-if="index != data.steps.length - 1">
               <img
-                v-bind:src="item.endStatus==1?'./static/imgPc/line-true-icon.png':'./static/imgPc/line-false-icon.png'"
+                v-bind:src="
+                  item.endStatus == 1
+                    ? './static/imgPc/line-true-icon.png'
+                    : './static/imgPc/line-false-icon.png'
+                "
                 alt
               />
-              <span>{{item.time}}</span>
+              <span>{{ item.time }}</span>
             </div>
           </div>
         </div>
@@ -84,9 +139,9 @@
           <span>物料核查：</span>
         </div>
         <ul class="checkUl">
-          <li v-for="(item,index) in data.checks" :key="index">
+          <li v-for="(item, index) in data.checks" :key="index">
             <div class="changeDiv">
-              <span>{{item.name}}</span>
+              <span>{{ item.name }}</span>
               <select id="choose" v-model="item.flag">
                 <option class="" value=""></option>
                 <option class="success" value="true">√</option>
@@ -96,17 +151,23 @@
           </li>
         </ul>
       </div>
-      <div style="margin-left:140px" v-if="data.canDeal">
-        <button class="back" @click="submit" style="cursor: pointer;">提交</button>
+      <div style="margin-left: 140px" v-if="data.canDeal">
+        <button class="back" @click="submit" style="cursor: pointer">
+          提交
+        </button>
       </div>
       <div>
         <div>
           <span>执行人：</span>
         </div>
-        <div class="executive-div" v-for="item in data.executors" :key="item.userName">
+        <div
+          class="executive-div"
+          v-for="item in data.executors"
+          :key="item.userName"
+        >
           <div class="executive-item">
             <img v-bind:src="'./static/imgPc/head-icon.png'" alt="head" />
-            <span>{{item.userName}}</span>
+            <span>{{ item.userName }}</span>
           </div>
         </div>
       </div>
@@ -120,14 +181,17 @@
 
     <!-- 切料日志 -->
     <task-info-blanking-log ref="taskInfoBlankingLog" />
+    <!-- 查看产品图样 -->
+    <preview-picture ref="previewPicture" />
   </div>
 </template>
 
 <script>
-import taskInfoBlankingLog from './taskInfoBlankingLog.vue';
+import taskInfoBlankingLog from "./taskInfoBlankingLog.vue";
+import PreviewPicture from '../components/PreviewPicture.vue';
 // import cover1 from '@/assets/images/1.jpg'
 export default {
-  components: { taskInfoBlankingLog },
+  components: { taskInfoBlankingLog, PreviewPicture },
   data() {
     return {
       data: {
@@ -144,9 +208,9 @@ export default {
         executors: [{ faceicon: "", userName: "", userId: "" }],
         checks: "",
         canDeal: true, //true 有权限修改 false 无权限修改
-        types:"",
-        typeId:'',
-        shipmentNo:''
+        types: "",
+        typeId: "",
+        shipmentNo: "",
       },
       checksList: [],
       checkParams: [],
@@ -163,7 +227,11 @@ export default {
   methods: {
     // 切料日志
     blankingLog() {
-      this.$refs.taskInfoBlankingLog.openDialog()
+      this.$refs.taskInfoBlankingLog.openDialog();
+    },
+    // 查看产品图样
+    checkFigure() {
+      this.$refs.previewPicture.previewImg();
     },
     init() {
       var params = {
@@ -186,9 +254,9 @@ export default {
               executors: "",
               checks: [],
               canDeal: false,
-              types:"",
-              typeId:'',
-              shipmentNo:''
+              types: "",
+              typeId: "",
+              shipmentNo: "",
             };
             console.log(resData);
             data.canAccept = resData.canAccept;
@@ -202,9 +270,9 @@ export default {
             data.price = resData.tasks.price;
             data.checks = resData.checks;
             data.canDeal = resData.canDeal;
-            data.types=resData.tasks.types;
-            data.typeId=resData.tasks.tasksId;
-            data.shipmentNo=resData.tasks.shipmentNo;
+            data.types = resData.tasks.types;
+            data.typeId = resData.tasks.tasksId;
+            data.shipmentNo = resData.tasks.shipmentNo;
             var steps = resData.steps;
 
             // console.log(data.checks)
@@ -329,7 +397,7 @@ export default {
     amendTasks() {
       this.$router.push({
         path: "/amendTask",
-        query:this.data,
+        query: this.data,
       });
     },
     //点我结束

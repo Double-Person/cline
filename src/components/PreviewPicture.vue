@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  name: 'PreviewPicture',
   props: {
     width: {
       type: String,
@@ -36,7 +37,7 @@ export default {
     // 预览图片
     previewImg(src) {
       this.dialogVisible = true;
-      this.src = src;
+      this.src = src || "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg";
     },
   },
 };

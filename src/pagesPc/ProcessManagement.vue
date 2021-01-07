@@ -1,5 +1,9 @@
 <template>
   <div class="warp">
+    <div class="nav-title">加工明细清单</div>
+    <div class="sub-title">
+      <span class="active">加工明细清单</span>
+    </div>
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="date" width="100" label="预计日期">
       </el-table-column>
@@ -93,6 +97,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../static/css/common.scss';
-
+@import "../../static/css/common.scss";
 </style>

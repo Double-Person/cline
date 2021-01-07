@@ -91,13 +91,15 @@
       </div>
     </div>
     <div class="custom-contain">
-      <div class="custom-left">
-        {{ query.giveOrGet }} ==
+      <!-- 左侧 -->
+      <div class="custom-left" v-if="model == 0">
+        <!-- {{ query.giveOrGet }} ==
+        {{ model }} -->
         <!-- 超时订单  被抄送的 -->
         <timeout-orders v-if="query.giveOrGet == 4" />
       </div>
-
-      <div class="main" style="background: pink">
+      <!-- 中间 -->
+      <div class="main">
         <slot name="title"> </slot>
         <!-- 任务列表 -->
         <p class="title" v-if="model == 0">
@@ -183,11 +185,10 @@
         </div>
         <p class="title" v-if="model == 8">新建采购</p>
 
-        <p class="title" v-if="model == 10">加工明细清单</p>
+        
 
-        <p class="title" v-if="model == 12">客户私款查询</p>
-        <p class="title" v-if="model == 13">客户管理</p>
-        <p class="title" v-if="model == 14">产品管理</p>
+        
+        
 
         <span v-if="model == 1" class="active">消息列表</span>
         <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
@@ -212,9 +213,7 @@
           <span class="active">->新建采购</span>
         </span>
 
-        <span v-if="model == 10" @click="linkTo(10)" style="cursor: pointer">
-          <span class="active">加工明细清单</span>
-        </span>
+      
 
         <!-- 页签部分 -->
         <div class="bookmark-div" v-show="bookmark.show">
@@ -333,8 +332,10 @@
           </div>
         </div>
       </div>
-
-      <div class="custom-right">right</div>
+      <!-- 右侧 -->
+      <div class="custom-right" v-if="model == 0">
+        <window-mode />
+      </div>
     </div>
 
     <div class="voice" v-show="voiceMask">
@@ -357,9 +358,10 @@
 </template>
 <script>
 import TimeoutOrders from "./TimeoutOrders.vue";
+import WindowMode from "./WindowMode.vue";
 
 export default {
-  components: { TimeoutOrders },
+  components: { TimeoutOrders, WindowMode },
   data() {
     return {
       haveNewMessage: false,
@@ -1212,15 +1214,21 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.custom-left,
+.custom-right {
+  width: 290px;
+  background: #fff;
+  margin-top: 15px;
+  border-radius: 4px;
+}
 .custom-left {
-  width: 240px;
-  margin-right: 4px;
-  background: skyblue;
+  /* margin-right: 4px; */
+  margin-right: 10px;
 }
 .custom-right {
-  width: 240px;
-  margin-left: 4px;
-  background: skyblue;
+  /* margin-left: 4px; */
+  margin-left: 10px;
 }
 
 /* 主要部分 */

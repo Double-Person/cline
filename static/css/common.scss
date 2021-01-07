@@ -3,6 +3,14 @@
     color: #446cea;
     // color: red;
     cursor: pointer;
+    font-size: 12px;
+}
+
+.nav-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 17px;
 }
 
 // 二级标题
@@ -10,14 +18,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 
 /deep/ .btn {
     background: #446bec;
     border-radius: 3px;
     margin-left: 15px;
+    padding: 0 10px;
     span {
         color: #fff;
+        font-size: 12px;
     }
 }
 

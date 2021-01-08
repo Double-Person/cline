@@ -1,33 +1,47 @@
 <template>
   <div>
-      <!-- 左边点某一天，右这个窗口就同步 显示出莱 -->
-      <ul>
-        <li>客户名称：照柏仕达</li>
-        <li>时间限制：2020-12-15 06:11:22至2020-12-15 06:11:22</li>
-        <li>任务价格：15元</li>
-        <li>任务环节：切割</li>
-        <li>物料核查：</li>
-        <li>执行人：</li>
-      </ul>
+    <!-- 左边点某一天，右这个窗口就同步 显示出莱 -->
+    <ul v-for="item in list" :key="item.id">
+      <li>客户名称：{{ item.name }}</li>
+      <li>时间限制：{{ item.startTime }}至{{ item.endTime }}</li>
+      <li>任务价格：{{ item.startTime }}元</li>
+      <li>任务环节：
+        <span v-for="(step, index) in item.steps" :key="index">{{step}}</span>
+      </li>
+      <li>物料核查：<span v-for="(check, index) in item.checks" :key="index">{{check.name}}</span></li>
+      <li>接收人：{{ item.acceptorName }}</li>
+    </ul>
   </div>
 </template>
 
 <script>
+import { eventBus } from "../eventBus";
 export default {
-
-}
+  data() {
+    return {
+      list: []
+    }
+  },
+  mounted() {
+    eventBus.$on('taskList', (res) => {
+      this.list = res
+    })
+  },
+};
 </script>
 
-<style>
-ul{
+<style scoped>
+ul {
   padding-top: 15px;
   list-style: none;
 }
-li{
+li, span {
   color: #747474;
   font-size: 12px;
   line-height: 30px;
   padding: 0 15px;
 }
-
+span{
+  padding: 0 15px 0 0;
+}
 </style>

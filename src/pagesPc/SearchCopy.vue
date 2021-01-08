@@ -38,7 +38,7 @@
                   src="../../static/imgPc/hammer.png"
                   alt=""
                 />
-                <img class="hammer" src="../../static/imgPc/logs.png" alt="" />
+                <img class="hammer" v-if="item.hasCutting" src="../../static/imgPc/logs.png" alt="" />
                 <div class="delivery" @click.stop="Bacmask(item.id)">
                   {{ item.shipName }}
                 </div>

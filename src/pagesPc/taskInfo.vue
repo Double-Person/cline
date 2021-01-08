@@ -227,7 +227,7 @@ export default {
   methods: {
     // 切料日志
     blankingLog() {
-      this.$refs.taskInfoBlankingLog.openDialog();
+      this.$refs.taskInfoBlankingLog.openDialog(this.$route.query.id);
     },
     // 查看产品图样
     checkFigure() {

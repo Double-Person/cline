@@ -26,16 +26,9 @@
           ></el-date-picker>
         </div>
       </div>
-      <div>
-        <span>客户查找:</span>
-        <el-select v-model="query.charge" placeholder="请选择" @change="changeType">
-          <el-option
-            v-for="item in charge"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
+      <div style="display:flex; justify-content: space-between;">
+        <span style="width: 100px; text-align: right;">客户查找:</span>
+        <el-input v-model="query.name" autocomplete="off" @input="search"></el-input>
       </div>
       <div>
         <span>任务状态:</span>
@@ -91,6 +84,10 @@
               <span>{{item.balance}}元</span>
             </div>
             <div style="width: 90px">
+               <a
+                style="color: #446CEA;cursor: pointer;"
+                @click="updateMoney(item)"
+              >修改金额</a>
               <a
                 style="color: #446CEA;cursor: pointer;"
                 @click="setMoney(item.id)"
@@ -186,10 +183,12 @@
     <!-- <div class="mask">
 
     </div>-->
+    <get-charge-update-money ref="getChargeUpdateMoney" @success="search" />
   </div>
 </template>
 
 <script>
+import GetChargeUpdateMoney from "./GetChargeUpdateMoney"
 // import cover1 from '@/assets/images/1.jpg'
 export default {
   data() {
@@ -198,6 +197,7 @@ export default {
         time: "",
         charge: 0,
         page: 1,
+        name:''
       },
       tableHeader: [
         {
@@ -285,6 +285,7 @@ export default {
     };
   },
   computed: {},
+  components: {GetChargeUpdateMoney},
   watch: {},
   mounted() {
     this.search();
@@ -297,9 +298,12 @@ export default {
     },
     search() {
       var params = {
-        page: this.query.page,
-        time: this.query.time,
-        charge: this.query.charge,
+        // page: this.query.page,
+        // time: this.query.time,
+        // charge: this.query.charge,
+        // name: this.query.name
+        ...this.query
+
         // tasksId:this.$route.query.id
       };
       this.$http
@@ -345,6 +349,10 @@ export default {
       this.moneyShow = true;
       this.tasksId = id;
       this.$parent.maskFuc(true);
+    },
+    updateMoney(row) {
+      console.log(row)
+      this.$refs.getChargeUpdateMoney.openDialog(row)
     },
     moneyCancel() {
       this.$parent.maskFuc(false);

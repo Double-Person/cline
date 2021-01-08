@@ -1,52 +1,70 @@
 <template>
   <div>
     <el-dialog title="切料日志" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
-      </div>
+      <el-button size="mini" type="primary" @click="handleEdit({})"
+              >新增</el-button>
+      <el-table :data="list" stripe height="500" style="width: 100%">
+        <el-table-column prop="time" label="日期">
+        </el-table-column>
+        <el-table-column prop="num" label="数量"> </el-table-column>
+        <el-table-column prop="des" label="备注" show-overflow-tooltip> </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
     </el-dialog>
+    
+  <task-info-blanking-log-add-edit ref="taskInfoBlankingLogAddEdit" @success="findCuttingLogs" />
   </div>
 </template>
 
 <script>
+import taskInfoBlankingLogAddEdit from './taskInfoBlankingLogAddEdit.vue';
 export default {
+  components: { taskInfoBlankingLogAddEdit },
   data() {
     return {
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
-      },
+      tasksId: "",
+      list: [],
       formLabelWidth: "120px",
     };
   },
   methods: {
-      openDialog() {
-         this.dialogFormVisible = true
-      }
-  }
+    openDialog(tasksId) {
+      this.dialogFormVisible = true;
+      this.tasksId = tasksId;
+      this.findCuttingLogs();
+    },
+    // 查询切料日志列表
+    findCuttingLogs() {
+      const params = {
+        tasksId: this.tasksId,
+      };
+      this.$http
+        .get("/api/cuttingLog/findCuttingLogs", params)
+        .then((res) => {
+          console.log(res);
+          this.list = res && res.data;
+        })
+        .catch((err) => {});
+    },
+    handleEdit(row) {
+      const params = {
+        tasksId: this.tasksId,
+        row
+      };
+      this.$refs.taskInfoBlankingLogAddEdit.openDialog(params)
+      
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style lang="scss" scoped>
+
+</style>>

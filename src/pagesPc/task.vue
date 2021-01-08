@@ -27,7 +27,7 @@
               <div class="my_delivery">
                 <span class="item-num">NO.{{ item.number }}</span>
                 <img class="hammer" v-if="item.waixie" src="../../static/imgPc/hammer.png" alt="">
-                <img class="hammer" src="../../static/imgPc/logs.png" alt="">
+                <img class="hammer" v-if="item.hasCutting" src="../../static/imgPc/logs.png" alt="">
                 <div class="delivery" @click.stop="Bacmask(item.id)">
                   {{ item.shipName }}
                 </div>
@@ -140,6 +140,8 @@
 // import shang from "../../static/imgPc/shang.png";
 // import xia from "../../static/imgPc/xia.png";
 // import cover1 from '@/assets/images/1.jpg'
+
+import {eventBus} from "../eventBus"
 export default {
   props: {
     query: {
@@ -334,6 +336,8 @@ export default {
               }
             });
             this.cards = res.data;
+            eventBus.$emit('taskList', this.cards.list)
+            
             // console.log(this.cards,"");
           }
           // this.$router.push({path:'/'})

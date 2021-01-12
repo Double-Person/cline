@@ -4,40 +4,42 @@
     <div class="sub-title">
       <div>
         <span class="active">客户私款查询</span>
-        <el-button type="primary" class="btn"
+        <el-button type="primary" class="btn" @click="drawings({})"
           >新增<i class="el-icon-plus el-icon--right"></i
         ></el-button>
       </div>
       <div class="search">
         <div class="label">客户姓名：</div>
-        <el-input v-model="userName" placeholder="请输入内容"></el-input>
+        <el-input v-model="customerName" placeholder="请输入内容"></el-input>
         <el-button type="primary" class="btn">查找</el-button>
       </div>
     </div>
 
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="date" width="100" label="序号"> </el-table-column>
-      <el-table-column prop="date" width="100" label="客户姓名">
+      <el-table-column prop="date" label="序号"  type="index">
       </el-table-column>
-      <el-table-column prop="name" label="型号"> </el-table-column>
-      <el-table-column prop="name" label="颜色"> </el-table-column>
-      <el-table-column prop="name" label="模具费用"> </el-table-column>
-      <el-table-column prop="name" label="单价"> </el-table-column>
-      <el-table-column prop="name" label="MOQ"> </el-table-column>
+      <el-table-column prop="customerName" label="客户姓名">
+      </el-table-column>
+      <el-table-column prop="productCode" label="型号" width="200"> </el-table-column>
+      <el-table-column prop="color" label="颜色"> </el-table-column>
+      <el-table-column prop="mould" label="模具费用"> </el-table-column>
+      <el-table-column prop="price" label="单价"> </el-table-column>
+      <el-table-column prop="moq" label="MOQ"> </el-table-column>
 
-      <el-table-column prop="name" label="合同编号"> </el-table-column>
+      <el-table-column prop="contract" width="200" label="合同编号"> </el-table-column>
+      <el-table-column prop="others" width="200" label="其他说明" show-overflow-tooltip> </el-table-column>
 
       <el-table-column width="100" label="加工规格图">
         <template slot-scope="scope">
-          <div class="drawing" @click="drawings(scope.$index, scope.row)">
+          <div class="drawing" @click="previewPicture(scope.row.productImg)">
             加工图纸
           </div>
         </template>
       </el-table-column>
 
-      <el-table-column width="150" label="编辑">
+      <el-table-column width="100" label="编辑" fixed="right">
         <template slot-scope="scope">
-          <div class="drawing edit" @click="drawings(scope.$index, scope.row)">
+          <div class="drawing edit" @click="drawings(scope.row)">
             修改
           </div>
         </template>
@@ -45,42 +47,47 @@
     </el-table>
 
 
-    <private-money-edit ref="privateMoneyEdit" />
+    <private-money-edit ref="privateMoneyEdit" @success="getList" />
+    <preview-picture ref="previewPicture" />
   </div>
 </template>
 
 <script>
+import PreviewPicture from '../components/PreviewPicture.vue';
 import PrivateMoneyEdit from './PrivateMoneyEdit.vue';
 export default {
-  components: { PrivateMoneyEdit },
+  components: { PrivateMoneyEdit, PreviewPicture },
   data() {
     return {
-      userName: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-      ],
+      customerName: "",
+      tableData: [],
     };
   },
 
+  mounted() {
+    this.getList()
+  },
+
   methods: {
-    drawings(index, row) {
-      console.log(index, row);
-      this.$refs.privateMoneyEdit.openDialo()
+    drawings(row) {
+      this.$refs.privateMoneyEdit.openDialo(row)
     },
+    previewPicture(productImg) {
+      this.$refs.previewPicture.previewImg(productImg)
+    },
+    // /api/privateFunds/findPrivateFunds     参数：customerName（客户名称）
+    // 列表查询：
+    getList() {
+      this.$http
+        .get("/api/privateFunds/findPrivateFunds", { customerName: this.customerName })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.tableData = res.data
+          }
+          
+        })
+        .catch((err) => {});
+    }
   },
 };
 </script>

@@ -27,7 +27,7 @@
         </div>
       </div>
       <div style="display:flex; justify-content: space-between;">
-        <span style="width: 100px; text-align: right;">客户查找:</span>
+        <span style="width: 130px; text-align: right;">客户查找:</span>
         <el-input v-model="query.name" autocomplete="off" @input="search"></el-input>
       </div>
       <div>

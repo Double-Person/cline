@@ -4,7 +4,7 @@
     <div class="sub-title">
       <div>
         <span class="active">产品管理</span>
-        <el-button type="primary" class="btn"
+        <el-button type="primary" class="btn" @click="drawings({})"
           >新增<i class="el-icon-plus el-icon--right"></i
         ></el-button>
       </div>
@@ -13,14 +13,14 @@
     
 
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="date" label="序号"> </el-table-column>
-      <el-table-column prop="date" label="产品编号"> </el-table-column>
+      <el-table-column prop="productId" label="序号"> </el-table-column>
+      <el-table-column prop="productCode" label="产品编号"> </el-table-column>
       <el-table-column prop="name" label="产品样图">
          <template slot-scope="scope">
           <div class="drawings">
             <div
               class="drawing edit"
-              @click="previewImg(scope.row.img)"
+              @click="previewImg(scope.row.productImg)"
             >
               点击查看
             </div>
@@ -33,7 +33,7 @@
           <div class="drawings">
             <div
               class="drawing edit"
-              @click="drawings(scope.$index, scope.row)"
+              @click="drawings(scope.row)"
             >
               编辑
             </div>
@@ -44,7 +44,7 @@
 
     <product-management-edit ref="productManagementEdit" />
 
-    <preview-picture ref="previewPicture" />
+    <preview-picture ref="previewPicture" @success="getList" />
   </div>
 </template>
 
@@ -78,13 +78,30 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getList()
+  },
   methods: {
+    /**
+     * /api/product/findProducts
+     */
+    // 列表查询：
+    getList() {
+      this.$http
+        .get("/api/product/findProducts", {  })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.tableData = res.data
+          }
+          
+        })
+        .catch((err) => {});
+    },
     previewImg(img) {
       this.$refs.previewPicture.previewImg(img)
     },
-    drawings(index, row) {
-      console.log(index, row);
-      this.$refs.productManagementEdit.openDialo()
+    drawings( row) {
+      this.$refs.productManagementEdit.openDialo(row)
     },
   },
 };

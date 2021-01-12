@@ -1,32 +1,33 @@
 <template>
-  <el-dialog title="新建产品信息" :visible.sync="dialogFormVisible">
+  <el-dialog :title="dialoTitle" :visible.sync="dialogFormVisible">
     <el-form
       :model="dynamicValidateForm"
       ref="dynamicValidateForm"
       label-width="150px"
       class="demo-dynamic"
     >
-      <el-form-item prop="name" label="产品编号">
-        <el-input v-model="dynamicValidateForm.name"></el-input>
+      <el-form-item
+        prop="productCode"
+        label="产品编号"
+        :rules="[{ required: true, message: '产品编号不能为空' }]"
+      >
+        <el-input v-model="dynamicValidateForm.productCode"></el-input>
       </el-form-item>
 
-      <el-form-item prop="imageUrl" label="产品图样">
+      <el-form-item prop="productImg" label="产品图样" :rules="[{ required: true, message: '产品图样不能为空' }]">
         <el-upload
           class="avatar-uploader"
+          :show-file-list="false"
           :action="$httppath"
           :headers="header"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
           ><img
-            v-if="dynamicValidateForm.imageUrl"
-            :src="dynamicValidateForm.imageUrl"
+            v-if="dynamicValidateForm.productImg"
+            :src="dynamicValidateForm.productImg"
             class="avatar"
           />
-          <img
-            v-if="dynamicValidateForm.imageUrl"
-            :src="dynamicValidateForm.imageUrl"
-            class="avatar"
-          />
+
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
@@ -45,12 +46,16 @@ export default {
   name: "ProcessManagementEdit",
   data() {
     return {
+      dialoTitle: "",
       authorization: "",
       header: {},
       dialogFormVisible: false,
+      addUrl: "/api/product/addProduct",
+      editUrl: "/api/product/editProduct",
       dynamicValidateForm: {
-        name: "",
-        imageUrl: "",
+        productId: "",
+        productCode: "",
+        productImg: "",
       },
     };
   },
@@ -58,25 +63,61 @@ export default {
     this.getSession();
   },
   methods: {
-    openDialo() {
+    openDialo(row) {
       this.dialogFormVisible = true;
+      this.dynamicValidateForm = row;
+      if (row.productId) {
+        this.dialoTitle = "编辑产品信息";
+      } else {
+        this.dialoTitle = "新建产品信息";
+      }
+    },
+    /**
+     * 新增接口：/api/product/addProduct     参数：productCode（产品编号）；productImg（产品图样）
+     */
+    /**
+     * 编辑接口：/api/product/editProduct    参数：productId（产品接口）；productCode（产品编号）；productImg（产品图样）
+     */
+    editForm() {
+      let url = "";
+      if (this.dynamicValidateForm.productId) {
+        url = this.editUrl;
+      } else {
+        url = this.addUrl;
+      }
+      this.$http
+        .get(url, {
+          ...this.dynamicValidateForm,
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.code == 1000) {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+            this.dialogFormVisible = false;
+            this.$emit("success");
+          } else {
+            this.$message.error("提交失败");
+          }
+        });
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log(this.dynamicValidateForm);
-        } else {
-          console.log("error submit!!");
+        if (!valid) {
           return false;
         }
+        console.log(this.dynamicValidateForm);
+        this.editForm();
       });
     },
 
     //上传物料图片
     handleAvatarSuccess(res, file) {
       // console.log(res)
-      this.dynamicValidateForm.imageUrl = res.data.imageUrl;
-      // console.log(this.data.imageUrl)
+      this.dynamicValidateForm.productImg = res.data.imageUrl;
+      // console.log(this.data.productImg)
     },
     //图片大小限制
     beforeAvatarUpload(file) {

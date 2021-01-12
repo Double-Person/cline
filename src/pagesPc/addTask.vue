@@ -13,6 +13,19 @@
           </div>
         </div>
       </div>
+      
+      <div>
+        <div>
+          <span>订单关键词：</span>
+        </div>
+        <div>
+          <el-select v-model="form.productId" placeholder="请选择">
+            <el-option v-for="item in orderKeyWords" :key="item.productId" :label="item.productCode" :value="item.productId"></el-option>
+          </el-select>
+        </div>
+      </div>
+
+
       <div>
         <div>
           <span>出货方式：</span>
@@ -318,6 +331,7 @@ export default {
       types: [], // 类型字典
       steps: [], // 步骤字典
       users: [], // 用户字典
+      orderKeyWords: [], // 订单关键词
       delivery: [{
         id: 0,
         name: '快递'
@@ -341,6 +355,7 @@ export default {
       // userName: "test"
       // works: 1
       form: {
+        productId: '', // 订单关键词
         name: '', // 客户名
         urgent: 6, // 加急（5：加急；6：不加急）
         types: '', // 任务类型
@@ -381,10 +396,23 @@ export default {
         console.log(res)
         this.form.name = res.tasks.name
       })
+      this.findProducts();
   },
   destroy () {},
 
   methods: {
+    
+    findProducts() {
+      this.$http
+        .get('/api/product/findProducts', {})
+        .then((res) => {
+          console.log(res)
+          this.orderKeyWords = res.data
+        })
+        .catch((err) => {
+          // console.log(err)
+        })
+    },
     AddInputUrl () {
       console.log(2222222222)
     },
@@ -611,7 +639,7 @@ export default {
         userId: JSON.parse(this.$cookie.get('userInfo')).userId,
         name: this.form.name, // 客户名
         urgent: this.form.urgent, // 加急（5：加急；6：不加急)
-
+        productId: this.form.productId,
         checks: this.thisChecks, // 物料核查
         types: this.form.types, // 任务类型
         // createTime:this.form.createTime,//任务开始时间

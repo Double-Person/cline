@@ -38,9 +38,16 @@ Vue.prototype.$http = new Http();
 
 Vue.prototype.$cookie = new Cookie();
 Vue.config.productionTip = false
-    // Vue.prototype.$httppath = "http://www.lsibss.com:8080/tasks/api/purchase/saveImage";
-Vue.prototype.$httppath = "http://yflh.hkzhtech.com/tasks/api/purchase/saveImage";
-// Vue.prototype.$httppath = "http://192.168.0.116:8080/tasks/api/purchase/saveImage";
+
+const URL = 'http://yflh.hkzhtech.com/tasks/';
+// const URL = 'http://192.168.0.116:8080/tasks/';
+// const URL = 'http://www.lsibss.com:8080/tasks/';
+
+// 之前文件上传地址
+Vue.prototype.$httppath = URL + "api/purchase/saveImage"; // 
+// 新加文件上传地址
+Vue.prototype.$httpNewPath = URL + "api/utils/uploadFile"; // /api/utilsuploadFile
+
 
 
 Vue.use(ElementUI)

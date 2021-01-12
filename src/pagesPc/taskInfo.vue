@@ -1,8 +1,10 @@
 <template>
   <div class="contain">
     <div class="button-div">
+      <!-- :class="data.canUpdate == true ? 'abled' : 'disabled'" -->
+      <button class="abled" @click="delTask">删除任务</button>
       <button class="abled" @click="blankingLog">切料日志</button>
-      <button class="abled" @click="checkFigure">查看产品图样</button>
+      <button class="abled" @click="checkFigure()">查看产品图样</button>
       <!-- <button @click="amendTasks" class="amend">修改任务</button> -->
 
       <button
@@ -195,6 +197,7 @@ export default {
   data() {
     return {
       data: {
+        productImg: '',
         canAccept: false,
         canFeedback: false,
         canUpdate: false,
@@ -225,13 +228,37 @@ export default {
   },
   destroy() {},
   methods: {
+    // 删除任务
+    delTask() {
+      let params = {
+        tasksId: this.$route.query.id,
+      };
+      this.$http
+        .get("/api/tasks/deleteTasks", params)
+        .then((res) => {
+          console.log(res.data);
+          if (res.code == 1000) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+             this.$router.go(-1)
+            // /task?bookmark=true&condition=true
+          } else {
+            this.$message.error("删除失败");
+          }
+        
+        })
+        .catch((err) => {});
+    },
     // 切料日志
     blankingLog() {
       this.$refs.taskInfoBlankingLog.openDialog(this.$route.query.id);
     },
     // 查看产品图样
-    checkFigure() {
-      this.$refs.previewPicture.previewImg();
+    checkFigure(productImg) {
+      console.log(this.data.productImg)
+      this.$refs.previewPicture.previewImg(this.data.productImg);
     },
     init() {
       var params = {
@@ -260,6 +287,7 @@ export default {
             };
             console.log(resData);
             data.canAccept = resData.canAccept;
+            data.productImg = resData.productImg;
             data.canFeedback = resData.canFeedback;
             data.canUpdate = resData.canUpdate;
             (data.canRevoke = resData.canRevoke),

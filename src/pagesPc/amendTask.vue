@@ -13,6 +13,20 @@
           </div>
         </div>
       </div>
+
+
+      
+      <div>
+        <div>
+          <span>订单关键词：</span>
+        </div>
+        <div>
+          <el-select v-model="form.productId" placeholder="请选择">
+            <el-option v-for="item in orderKeyWords" :key="item.productId" :label="item.productCode" :value="item.productId"></el-option>
+          </el-select>
+        </div>
+      </div>
+
       <div>
         <div>
           <span>出货方式：</span>
@@ -276,6 +290,7 @@
         types: [], //类型字典
         steps: [], //步骤字典
         users: [], //用户字典
+        orderKeyWords: [], // 订单关键词
         delivery: [{
             id: 0,
             name: '快递'
@@ -299,6 +314,7 @@
         // userName: "test"
         // works: 1
         form: {
+          productId: '', // 订单关键词
           name: "", //客户名
           urgent: 6, //加急（5：加急；6：不加急）
           types: "", //任务类型
@@ -325,6 +341,7 @@
     watch: {},
     created() {
       // this.dictionary();
+      this.findProducts();
     },
     mounted() {
       this.mytextID = Number(this.$route.query.typeId);
@@ -335,6 +352,7 @@
       this.$http
         .get("/api/tasks/toUpdate", params)
         .then((res) => {
+          console.log('+++++++++++++++++++++', res)
           //类型字典(生产环节，类型)
           this.types = res.types;
           //步骤字典(任务环节)
@@ -346,6 +364,7 @@
           this.thisChecks=newObj.checks?JSON.parse(newObj.checks):[]
           this.form.tasksId=newObj.shipment
           this.form.types=newObj.types
+          this.form.productId = newObj.productId;
           this.form.dateRange=newObj.endTime
           this.form.describes=newObj.describes
           this.form.price=newObj.price
@@ -414,6 +433,17 @@
     destroy() {},
 
     methods: {
+      findProducts() {
+      this.$http
+        .get('/api/product/findProducts', {})
+        .then((res) => {
+          console.log(res)
+          this.orderKeyWords = res.data
+        })
+        .catch((err) => {
+          // console.log(err)
+        })
+    },
       // dictionary() {
       //   //
       //   var params = {
@@ -603,7 +633,7 @@
           userId: JSON.parse(this.$cookie.get("userInfo")).userId,
           name: this.form.name, //客户名
           urgent: this.form.urgent, //加急（5：加急；6：不加急)
-
+          productId: this.form.productId,
           checks: this.thisChecks, //物料核查
           types: this.form.types, //任务类型
           // createTime:this.form.createTime,//任务开始时间

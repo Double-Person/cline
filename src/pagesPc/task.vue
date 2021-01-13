@@ -3,7 +3,13 @@
     <!-- 主要内容 -->
     <div class="main">
       <div class="main-right">
-        <div class="cards">
+        <div
+          class="cards"
+          v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
+        >
           <div
             class="card-item"
             v-for="(item, index) in cards.list"
@@ -26,8 +32,18 @@
             <div class="card-item-top">
               <div class="my_delivery">
                 <span class="item-num">NO.{{ item.number }}</span>
-                <img class="hammer" v-if="item.waixie" src="../../static/imgPc/hammer.png" alt="">
-                <img class="hammer" v-if="item.hasCutting" src="../../static/imgPc/logs.png" alt="">
+                <img
+                  class="hammer"
+                  v-if="item.waixie"
+                  src="../../static/imgPc/hammer.png"
+                  alt=""
+                />
+                <img
+                  class="hammer"
+                  v-if="item.hasCutting"
+                  src="../../static/imgPc/logs.png"
+                  alt=""
+                />
                 <div class="delivery" @click.stop="Bacmask(item.id)">
                   {{ item.shipName }}
                 </div>
@@ -58,9 +74,13 @@
                 :content="item.steps && item.steps.join('，')"
                 placement="top-start"
               >
-         
-                 <div class="progress-tags" >
-                  <span class="tag" v-for='(step, indey) in item.steps' :key="indey">{{ step }}</span>           
+                <div class="progress-tags">
+                  <span
+                    class="tag"
+                    v-for="(step, indey) in item.steps"
+                    :key="indey"
+                    >{{ step }}</span
+                  >
                 </div>
               </el-tooltip>
 
@@ -141,7 +161,7 @@
 // import xia from "../../static/imgPc/xia.png";
 // import cover1 from '@/assets/images/1.jpg'
 
-import {eventBus} from "../eventBus"
+import { eventBus } from "../eventBus";
 export default {
   props: {
     query: {
@@ -168,6 +188,7 @@ export default {
           active: true,
         },
       ],
+      loading: true,
       page: 1,
       cards: {
         pageNumber: 10,
@@ -243,6 +264,7 @@ export default {
       // this.$emit('init', data)
     },
     getData() {
+      this.loading = true;
       // /api/tasks/findAllUnfinishedTasks
       // console.log(this.query)
       var params = {
@@ -254,7 +276,7 @@ export default {
         keywords: this.query.keywords,
         searchText: this.query.keywords,
       };
-             
+
       // console.log(this.query.giveOrGet)
       if (this.query.giveOrGet == 1) {
         params.type = 11;
@@ -336,13 +358,14 @@ export default {
               }
             });
             this.cards = res.data;
-            eventBus.$emit('taskList', this.cards.list)
-            
+            eventBus.$emit("taskList", this.cards.list);
+
             // console.log(this.cards,"");
           }
           // this.$router.push({path:'/'})
         })
-        .catch((err) => {});
+        .catch((err) => {})
+        .finally(() => (this.loading = false));
     },
     handleSizeChange(val) {
       // console.log(val)
@@ -385,7 +408,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* 主要部分 */
 /* 卡片 */
 /* @-webkit-keyframes greenPulse {
@@ -403,6 +425,11 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+.cards {
+  max-height: calc(100vh - 61px - 54px - 75px - 76px - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mask {
@@ -469,7 +496,7 @@ export default {
   justify-content: space-between;
 }
 
-.hammer{
+.hammer {
   width: 29px;
   height: 29px;
 }
@@ -493,6 +520,7 @@ export default {
 .cards {
   width: 100%;
   min-height: 300px;
+
   display: flex;
 
   justify-content: flex-start;
@@ -515,7 +543,7 @@ export default {
   position: relative;
 }
 
-.creatorName{
+.creatorName {
   position: absolute;
   left: 17px;
   top: 3px;

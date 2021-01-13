@@ -24,7 +24,20 @@
         <template slot-scope="scope">
           <div class="drawings">
             <div class="drawing edit" @click="drawings(scope.row)">修改</div>
-            <div class="drawing del">删除</div>
+            <el-popconfirm
+              confirm-button-text="确定"
+              cancel-button-text="取消"
+              icon="el-icon-info"
+              icon-color="red"
+              title="你确定删除吗？"
+              @confirm="confirm(scope.row.customerId)"
+            >
+            <!--   -->
+              <div slot="reference" class="drawing del">
+                <!-- @click="delList(scope.row.customerId)" -->
+                删除
+              </div>
+            </el-popconfirm>
           </div>
         </template>
       </el-table-column>
@@ -60,12 +73,33 @@ export default {
       this.$http
         .get("/api/customer/findCustomers", { searchText: this.searchText })
         .then((res) => {
-          console.log(res);
           if (res.code == 1000) {
             this.tableData = res.data;
+          } else {
+            this.$message.error("系统错误");
           }
         })
-        .catch((err) => {});
+        .catch(() => this.$message.error("系统错误"));
+    },
+    confirm(customerId) {
+      console.log(customerId)
+      // this.delList(customerId);
+    },
+    delList(customerId) {
+      this.$http
+        .get("/api/customer/deleteCustomer", { customerId })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.getList();
+          } else {
+            this.$message.error("删除失败");
+          }
+        })
+        .catch(() => this.$message.error("删除失败"));
     },
   },
 };

@@ -96,7 +96,7 @@
         <!-- {{ query.giveOrGet }} ==
         {{ model }} -->
         <!-- 超时订单  被抄送的 -->
-        <timeout-orders v-if="query.giveOrGet == 4" />
+        <timeout-orders :type="query.giveOrGet" />
       </div>
       <!-- 中间 -->
       <div class="main">
@@ -1092,7 +1092,7 @@ export default {
   position: sticky;
   top: 61px;
   background: rgb(240, 241, 243);
-  /* z-index: 1; */
+  z-index: 1;
 }
 
 .header-contain {
@@ -1113,6 +1113,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  
 }
 
 .header span {
@@ -1221,10 +1222,14 @@ export default {
   background: #fff;
   margin-top: 15px;
   border-radius: 4px;
+  height: calc( 100vh - 85px );
+  overflow-y: auto;
 }
 .custom-left {
   /* margin-right: 4px; */
   margin-right: 10px;
+  /* overflow-x: auto; */
+  overflow: hidden;
 }
 .custom-right {
   /* margin-left: 4px; */

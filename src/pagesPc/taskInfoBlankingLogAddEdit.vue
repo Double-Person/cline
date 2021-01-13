@@ -12,7 +12,7 @@
         >
           <el-input v-model="form.des" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           label="数量"
           :label-width="formLabelWidth"
           prop="num"
@@ -26,7 +26,7 @@
             v-model.number="form.num"
             autocomplete="off"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>

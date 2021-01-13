@@ -6,7 +6,7 @@
       <el-table :data="list" stripe height="500" style="width: 100%">
         <el-table-column prop="time" label="日期">
         </el-table-column>
-        <el-table-column prop="num" label="数量"> </el-table-column>
+        <!-- <el-table-column prop="num" label="数量"> </el-table-column> -->
         <el-table-column prop="des" label="备注" show-overflow-tooltip> </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">

@@ -3,8 +3,8 @@ import Cookie from '@/assets/commonReq/cookie.js'
 
 // const baseURI="http://127.0.0.1:8080/tasks"
 // const baseURI="http://www.lsibss.com:8080/tasks"
-const baseURI = "http://yflh.hkzhtech.com/tasks"
-    // const baseURI = "http://192.168.0.116:8080/tasks"
+// const baseURI = "http://yflh.hkzhtech.com/tasks"
+const baseURI = "http://192.168.0.116:8080/tasks"
 
 
 axios.defaults.baseURI = baseURI
@@ -65,7 +65,6 @@ class Http {
         // response 拦截器
         axios.interceptors.response.use(
             response => {
-                // console.log('response',response)
                 // 移除已经完成的请求
                 let requestData = vm.getRequestIdentify(response.config)
                 vm.removePending(requestData)

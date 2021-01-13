@@ -7,7 +7,13 @@
       class="demo-dynamic"
       v-loading="loading"
     >
-      <el-form-item prop="customerId" label="客户名称">
+      <el-form-item
+        prop="customerId"
+        label="客户名称"
+        :rules="[
+          { required: true, message: '请选择客户名称', trigger: 'change' },
+        ]"
+      >
         <!-- <el-input v-model="dynamicValidateForm.customerId"></el-input> -->
         <el-select
           v-model="dynamicValidateForm.customerId"
@@ -21,7 +27,13 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="productId" label="客户型号">
+      <el-form-item
+        prop="productId"
+        label="客户型号"
+        :rules="[
+          { required: true, message: '请选择客户型号', trigger: 'change' },
+        ]"
+      >
         <!-- <el-input v-model="dynamicValidateForm.productId"></el-input> -->
         <el-select
           v-model="dynamicValidateForm.productId"
@@ -36,7 +48,11 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item prop="productImg" label="上传加工规格图">
+      <el-form-item
+        prop="productImg"
+        label="上传加工规格图"
+        :rules="[{ required: true, message: '请上传规格图' }]"
+      >
         <el-upload
           class="avatar-uploader"
           :show-file-list="false"
@@ -55,29 +71,33 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item prop="color" label="颜色">
-        <el-input
-          v-model="dynamicValidateForm.color"
-          :rules="[{ required: true, message: '客户联系人不能为空' }]"
-        ></el-input>
+      <el-form-item
+        prop="color"
+        label="颜色"
+        :rules="[{ required: true, message: '颜色不能为空' }]"
+      >
+        <el-input v-model="dynamicValidateForm.color"></el-input>
       </el-form-item>
-      <el-form-item prop="mould" label="模具费用">
-        <el-input
-          v-model="dynamicValidateForm.mould"
-          :rules="[{ required: true, message: '客户联系人不能为空' }]"
-        ></el-input>
+      <el-form-item
+        prop="mould"
+        label="模具费用"
+        :rules="[{ required: true, message: '模具费用不能为空' }]"
+      >
+        <el-input v-model="dynamicValidateForm.mould"></el-input>
       </el-form-item>
-      <el-form-item prop="price" label="单价">
-        <el-input
-          v-model="dynamicValidateForm.price"
-          :rules="[{ required: true, message: '客户联系人不能为空' }]"
-        ></el-input>
+      <el-form-item
+        prop="price"
+        label="单价"
+        :rules="[{ required: true, message: '单价不能为空' }]"
+      >
+        <el-input v-model="dynamicValidateForm.price"></el-input>
       </el-form-item>
-      <el-form-item prop="moq" label="MOQ">
-        <el-input
-          v-model="dynamicValidateForm.moq"
-          :rules="[{ required: true, message: 'MOQ不能为空' }]"
-        ></el-input>
+      <el-form-item
+        prop="moq"
+        label="MOQ"
+        :rules="[{ required: true, message: 'MOQ不能为空' }]"
+      >
+        <el-input v-model="dynamicValidateForm.moq"></el-input>
       </el-form-item>
       <el-form-item
         prop="contract"
@@ -193,7 +213,6 @@ export default {
       }
 
       this.$http.get(url, parmas).then((res) => {
-        console.log(res);
         if (res.code == 1000) {
           this.$message({
             message: "修改成功",
@@ -243,7 +262,20 @@ export default {
       });
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      try {
+        this.$refs[formName].resetFields();
+      } catch (error) {}
+      this.dynamicValidateForm = {
+        customerId: "", //（客户）；
+        productId: "", //（产品）；
+        productImg: "", //（产品图样）；
+        color: "", //（颜色）；
+        mould: "", //（模具费用）；
+        price: "", //（价格）
+        moq: "", //（MOQ）
+        contract: "", // （合同编号）；
+        others: "", // （其他说明）
+      };
     },
 
     //上传物料图片

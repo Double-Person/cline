@@ -1,8 +1,7 @@
 <template>
   <div class="contain">
     <div class="button-div">
-      <!-- :class="data.canUpdate == true ? 'abled' : 'disabled'" -->
-      <button class="abled" @click="delTask">删除任务</button>
+      <button class="abled" :class="data.canUpdate == true ? 'abled' : 'disabled'" @click="delTask">删除任务</button>
       <button class="abled" @click="blankingLog">切料日志</button>
       <button class="abled" @click="checkFigure()">查看产品图样</button>
       <!-- <button @click="amendTasks" class="amend">修改任务</button> -->

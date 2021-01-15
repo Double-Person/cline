@@ -136,6 +136,24 @@
         </div>
       </div>
       <div>
+        <span>出货留存：</span>
+        <el-upload
+          class="avatar-uploader"
+          :action="$httppath"
+          :headers="header"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          ><img
+            v-if="sourseImg"
+            :src="sourseImg"
+            class="avatar"
+          />
+         
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </div>
+     
+      <div>
         <div>
           <span>物料核查：</span>
         </div>
@@ -196,6 +214,7 @@ export default {
   data() {
     return {
       data: {
+        
         productImg: '',
         canAccept: false,
         canFeedback: false,
@@ -214,6 +233,9 @@ export default {
         typeId: "",
         shipmentNo: "",
       },
+      authorization: "",
+      header: {},
+      sourseImg: '',
       checksList: [],
       checkParams: [],
     };
@@ -221,12 +243,64 @@ export default {
   computed: {},
   watch: {},
   mounted() {
+    this.getSession();
     this.init();
     // this.data.shipmentNo=this.$route.query.tasks.shipmentNo;
     // console.log(this.tasksshipmentNo);
   },
   destroy() {},
   methods: {
+    // 出货留存
+    shipmentRetention() {
+      let params = {
+        sourseImg: this.sourseImg ,tasksId: this.$route.query.id
+      }
+      this.$http
+        .get("/api/tasks/shipmentRetention", params)
+        .then((res) => {
+          console.log(res.data);
+          if (res.code == 1000) {
+            this.$message({
+              message: "存档成功",
+              type: "success",
+            });
+          } else {
+            this.$message.error("存档失败");
+          }
+        
+        })
+        .catch((err) => {});
+    },
+     //上传物料图片
+    handleAvatarSuccess(res, file) {
+      console.log(res)
+      this.sourseImg = res.data.imageUrl;
+      this.shipmentRetention()
+      // console.log(this.data.imageUrl)
+    },
+    //图片大小限制
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === 'image/jpeg';
+      const isLt5M = file.size / 1024 / 1024 < 5;
+
+      // if (!isJPG) {
+      // this.$message.error('上传头像图片只能是 JPG 格式!');
+      // }
+      if (!isLt5M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isLt5M;
+      return isJPG && isLt5M;
+    },
+    //获取session
+    getSession() {
+      this.authorization = localStorage.getItem("Authorization");
+      this.header = {
+        Authorization: this.authorization,
+      };
+      console.log(this.header);
+    },
+  
     // 删除任务
     delTask() {
       let params = {
@@ -300,6 +374,7 @@ export default {
             data.types = resData.tasks.types;
             data.typeId = resData.tasks.tasksId;
             data.shipmentNo = resData.tasks.shipmentNo;
+            this.sourseImg = resData.tasks.sourseImg
             var steps = resData.steps;
 
             // console.log(data.checks)
@@ -471,6 +546,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../../static/css/upLoadFile.scss";
 .contain {
   display: flex;
   justify-content: flex-end;

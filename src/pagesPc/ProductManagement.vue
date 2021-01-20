@@ -42,9 +42,9 @@
       </el-table-column>
     </el-table>
 
-    <product-management-edit ref="productManagementEdit" />
+    <product-management-edit ref="productManagementEdit" @success="getList" />
 
-    <preview-picture ref="previewPicture" @success="getList" />
+    <preview-picture ref="previewPicture" />
   </div>
 </template>
 

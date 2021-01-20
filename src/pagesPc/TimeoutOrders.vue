@@ -13,7 +13,7 @@
         >
           <span class="name">{{ item.name }}</span>
         </el-tooltip>
-        <span class="view-order" @click="cardInfo(item.id)">查看订单</span>
+        <span class="view-order" @click="cardInfo(item.tasksId)">查看订单</span>
       </li>
     </ul>
 

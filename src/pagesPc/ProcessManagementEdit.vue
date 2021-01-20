@@ -6,69 +6,56 @@
       label-width="150px"
       class="demo-dynamic"
     >
-      <el-form-item prop="time1" label="预计交期">
-        <el-date-picker
-          type="date"
-          placeholder="选择日期"
-          v-model="dynamicValidateForm.time1"
-          style="width: 100%"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item prop="time2" label="订单交期">
+      <el-form-item prop="ordEndTime" label="订单交期">
         <el-date-picker
           disabled
           type="date"
           placeholder="选择日期"
-          v-model="dynamicValidateForm.time2"
+          v-model="dynamicValidateForm.ordEndTime"
           style="width: 100%"
         ></el-date-picker>
       </el-form-item>
 
-      <el-form-item prop="name" label="名称">
-        <el-input disabled v-model="dynamicValidateForm.name"></el-input>
+      <el-form-item prop="customer" label="名称">
+        <el-input disabled v-model="dynamicValidateForm.customer"></el-input>
       </el-form-item>
-      <el-form-item prop="orderNum" label="订单号">
-        <el-input v-model="dynamicValidateForm.orderNum"></el-input>
+      <el-form-item prop="orderNo" label="订单号">
+        <el-input v-model="dynamicValidateForm.orderNo"></el-input>
       </el-form-item>
-      <el-form-item prop="type" label="材料型号">
-        <el-input v-model="dynamicValidateForm.type"></el-input>
+      <el-form-item prop="matter" label="材料型号">
+        <el-input v-model="dynamicValidateForm.matter"></el-input>
       </el-form-item>
 
       <el-form-item
         class="add-row"
-        v-for="(domain, index) in dynamicValidateForm.domains"
-        :label="'长度' + index"
+        v-for="(domain, index) in dynamicValidateForm.details"
+        label=" "
         :key="domain.key"
-        :prop="'domains.' + index + '.value1'"
+        :prop="'details.' + index + '.id'"
       >
-        <el-input style="width: 200px" v-model="domain.value1"></el-input>
-        数量：
-        <el-input style="width: 200px" v-model="domain.value2"></el-input>
-        <el-button @click.prevent="removeDomain(domain)">删除</el-button>
-        <el-button @click.prevent="addDomain" v-if="index == 0"
-          >新增域名</el-button
-        >
-      </el-form-item>
+        <div>
+          <span class="custom-label">长度 {{ index + 1 }}</span>
+          <el-input style="width: 200px" v-model="domain.length"></el-input>
+          数量：
+          <el-input style="width: 200px" v-model="domain.num"></el-input>
+          <el-button @click.prevent="removeDomain(domain)">删除</el-button>
+          <el-button @click.prevent="addDomain" v-if="index == 0"
+            >新增</el-button
+          >
+        </div>
+        <div @click="checkIndex = index">
+          <span class="custom-label">加工规格图</span>
+          <el-upload
+            class="avatar-uploader"
+            :action="$httppath"
+            :headers="header"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            ><img v-if="domain.imgUrl" :src="domain.imgUrl" class="avatar" />
 
-      <el-form-item prop="imageUrl" label="上传加工规格图">
-        <el-upload
-          class="avatar-uploader"
-          :action="$httppath"
-          :headers="header"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          ><img
-            v-if="dynamicValidateForm.imageUrl"
-            :src="dynamicValidateForm.imageUrl"
-            class="avatar"
-          />
-          <img
-            v-if="dynamicValidateForm.imageUrl"
-            :src="dynamicValidateForm.imageUrl"
-            class="avatar"
-          />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </div>
       </el-form-item>
 
       <el-form-item>
@@ -89,18 +76,19 @@ export default {
       header: {},
       dialogFormVisible: false,
       dynamicValidateForm: {
-        domains: [
+        details: [
           {
-            value1: "",
-            value2: "",
+            id: 0,
+            length: "123",
+            num: "",
+            imgUrl: "",
           },
         ],
-        time1: "",
-        time2: "2020-11-30",
-        name: "",
-        orderNum: "",
-        type: "",
-        imageUrl: "",
+        ordEndTime: "",
+        customer: "",
+        orderNo: "",
+        matter: "",
+        id: "",
       },
     };
   },
@@ -108,14 +96,60 @@ export default {
     this.getSession();
   },
   methods: {
-    openDialo() {
+    // 查询详情：/api/process/findProcessById     参数：id（进程ID）
+    findProcessById(id) {
+      this.$http.get("/api/process/findProcessById", { id }).then((res) => {
+        if (res.code == 1000) {
+          this.dynamicValidateForm = res.data;
+          if(!res.data.details.length) {
+            this.dynamicValidateForm.details = [ {
+            id: 0,
+            length: "",
+            num: "",
+            imgUrl: "",
+          },
+        ]
+          }
+          // let { customer, ordEndTime, id, matter, orderNo } = res.data;
+          // this.dynamicValidateForm.customer = customer;
+          // this.dynamicValidateForm.id = id;
+          // this.dynamicValidateForm.ordEndTime = ordEndTime;
+          // this.dynamicValidateForm.matter = matter;
+          // this.dynamicValidateForm.orderNo = orderNo;
+        }
+      });
+    },
+    openDialo(id) {
       this.dialogFormVisible = true;
-      console.log(this.$parent.selectRow);
+      this.findProcessById(id);
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          /**
+         *   修改详情：/api/process/updateProcess     参数：id（进程ID） orderNo（订单号） matter（物料型号）  details（详情列表）{
+                                                     id(详情ID，修改传ID，新增传0)  length（长度） num（数量）
+         */
+
           console.log(this.dynamicValidateForm);
+          // return false;
+
+          this.$http
+            .post("/api/process/updateProcess", { ...this.dynamicValidateForm })
+            .then((res) => {
+              // console.log(this.query.time)
+              if (res.code == 1000) {
+                  this.$message({
+                    message: "成功",
+                    type: "success",
+                  });
+                  this.dialogFormVisible = true;
+                  this.$emit('success')
+                } else {
+                  this.$message.error("失败");
+                }
+            })
+            .catch((err) => {});
         } else {
           console.log("error submit!!");
           return false;
@@ -124,22 +158,31 @@ export default {
     },
 
     removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
+      var index = this.dynamicValidateForm.details.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
+        this.dynamicValidateForm.details.splice(index, 1);
+        console.log(item)
+        if(item.id != 0) {
+          this.$http.get('/api/processDetail/deleteDetail', {id: item.id})
+        }
+        
       }
     },
     addDomain() {
-      this.dynamicValidateForm.domains.push({
-        value1: "",
-        value2: "",
+      this.dynamicValidateForm.details.push({
+        length: "",
+        num: "",
+        imgUrl: "",
         key: Date.now(),
       });
     },
+
     //上传物料图片
     handleAvatarSuccess(res, file) {
-      // console.log(res)
-      this.dynamicValidateForm.imageUrl = res.data.imageUrl;
+      console.log(res, file);
+      console.log(this.checkIndex);
+      this.dynamicValidateForm.details[this.checkIndex].imgUrl =
+        res.data.imageUrl;
       // console.log(this.data.imageUrl)
     },
     //图片大小限制
@@ -162,7 +205,6 @@ export default {
       this.header = {
         Authorization: this.authorization,
       };
-      console.log(this.header);
     },
   },
 };
@@ -171,6 +213,19 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/upLoadFile.scss";
 .warp {
+  .custom-label {
+    font-size: 14px;
+    color: #606266;
+    text-align: right;
+    display: inline-block;
+    margin-left: -100px;
+    width: 100px;
+    &::after {
+      content: " ";
+      margin-right: 5px;
+    }
+  }
+
   .add-row {
     display: flex;
     align-items: center;
@@ -178,6 +233,5 @@ export default {
       margin-left: 0px !important;
     }
   }
-
 }
 </style>

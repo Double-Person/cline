@@ -240,8 +240,6 @@ export default {
       checkParams: [],
     };
   },
-  computed: {},
-  watch: {},
   mounted() {
     this.getSession();
     this.init();
@@ -334,6 +332,7 @@ export default {
       this.$refs.previewPicture.previewImg(this.data.productImg);
     },
     init() {
+      console.log(this.$route)
       var params = {
         tasksId: this.$route.query.id,
         userId: JSON.parse(this.$cookie.get("userInfo")).userId,

@@ -19,10 +19,20 @@
       <el-form-item prop="customer" label="名称">
         <el-input disabled v-model="dynamicValidateForm.customer"></el-input>
       </el-form-item>
-      <el-form-item prop="orderNo" label="订单号">
+      <el-form-item
+        prop="orderNo"
+        label="订单号"
+        :rules="[{ required: true, message: '请输入订单号', trigger: 'blur' }]"
+      >
         <el-input v-model="dynamicValidateForm.orderNo"></el-input>
       </el-form-item>
-      <el-form-item prop="matter" label="材料型号">
+      <el-form-item
+        prop="matter"
+        label="材料型号"
+        :rules="[
+          { required: true, message: '请输入材料型号', trigger: 'blur' },
+        ]"
+      >
         <el-input v-model="dynamicValidateForm.matter"></el-input>
       </el-form-item>
 
@@ -31,14 +41,19 @@
         v-for="(domain, index) in dynamicValidateForm.details"
         label=" "
         :key="domain.key"
-        :prop="'details.' + index + '.id'"
+        :prop="'details.' + index + '.num'"
+        :rules="{
+          required: true,
+          message: '数量不能为空',
+          trigger: 'blur',
+        }"
       >
         <div>
           <span class="custom-label">长度 {{ index + 1 }}</span>
           <el-input style="width: 200px" v-model="domain.length"></el-input>
           数量：
           <el-input style="width: 200px" v-model="domain.num"></el-input>
-          <el-button @click.prevent="removeDomain(domain)">删除</el-button>
+          <el-button @click.prevent="removeDomain(domain)" v-if="dynamicValidateForm.details.length > 1">删除</el-button>
           <el-button @click.prevent="addDomain" v-if="index == 0"
             >新增</el-button
           >
@@ -79,7 +94,7 @@ export default {
         details: [
           {
             id: 0,
-            length: "123",
+            length: "",
             num: "",
             imgUrl: "",
           },
@@ -96,19 +111,42 @@ export default {
     this.getSession();
   },
   methods: {
+    checkisNull() {
+      let { details } = this.dynamicValidateForm;
+      for(let i = 0; i < details.length; i++) {
+        let obj = details[i];
+       let list = Object.values(obj);
+       let [id, leng, num, imgUrl] = list;
+       if(leng == '') {
+         this.$message.error(`第${i + 1}次长度不能为空`);
+         return 'empt';
+       }
+       if(num == '') {
+         this.$message.error(`第${i + 1}次数量不能为空`);
+          return 'empt';
+       }
+       if(imgUrl == '') {
+         this.$message.error(`第${i + 1}次加工规格图不能为空`);
+          return 'empt';
+       }
+ 
+      
+      }
+    },
     // 查询详情：/api/process/findProcessById     参数：id（进程ID）
     findProcessById(id) {
       this.$http.get("/api/process/findProcessById", { id }).then((res) => {
         if (res.code == 1000) {
           this.dynamicValidateForm = res.data;
-          if(!res.data.details.length) {
-            this.dynamicValidateForm.details = [ {
-            id: 0,
-            length: "",
-            num: "",
-            imgUrl: "",
-          },
-        ]
+          if (!res.data.details.length) {
+            this.dynamicValidateForm.details = [
+              {
+                id: 0,
+                length: "",
+                num: "",
+                imgUrl: "",
+              },
+            ];
           }
           // let { customer, ordEndTime, id, matter, orderNo } = res.data;
           // this.dynamicValidateForm.customer = customer;
@@ -123,36 +161,50 @@ export default {
       this.dialogFormVisible = true;
       this.findProcessById(id);
     },
-    submitForm(formName) {
+    submitForm(formName) {      
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if(this.checkisNull() == 'empt') {
+            return false;
+          }
           /**
          *   修改详情：/api/process/updateProcess     参数：id（进程ID） orderNo（订单号） matter（物料型号）  details（详情列表）{
                                                      id(详情ID，修改传ID，新增传0)  length（长度） num（数量）
          */
-
-          console.log(this.dynamicValidateForm);
-          // return false;
 
           this.$http
             .post("/api/process/updateProcess", { ...this.dynamicValidateForm })
             .then((res) => {
               // console.log(this.query.time)
               if (res.code == 1000) {
-                  this.$message({
-                    message: "成功",
-                    type: "success",
-                  });
-                  this.dialogFormVisible = true;
-                  this.$emit('success')
-                } else {
-                  this.$message.error("失败");
-                }
+                this.$message({
+                  message: "成功",
+                  type: "success",
+                });
+                this.dialogFormVisible = false;
+                this.$emit("success");
+              } else {
+                this.$message.error("失败");
+              }
             })
-            .catch((err) => {});
+            .catch((err) => this.$message.error("失败"));
         } else {
-          console.log("error submit!!");
           return false;
+        }
+      });
+    },
+
+    // 删除详情
+    _deleteDetail(id) {
+      this.$http.get("/api/processDetail/deleteDetail", { id }).then((res) => {
+        if (res.code == 1000) {
+          this.$message({
+            message: "删除成功",
+            type: "success",
+          });
+          this.$emit("success");
+        } else {
+          this.$message.error("删除失败");
         }
       });
     },
@@ -161,15 +213,14 @@ export default {
       var index = this.dynamicValidateForm.details.indexOf(item);
       if (index !== -1) {
         this.dynamicValidateForm.details.splice(index, 1);
-        console.log(item)
-        if(item.id != 0) {
-          this.$http.get('/api/processDetail/deleteDetail', {id: item.id})
+        if (item.id != 0) {
+          this._deleteDetail(item.id);
         }
-        
       }
     },
     addDomain() {
       this.dynamicValidateForm.details.push({
+        id: 0,
         length: "",
         num: "",
         imgUrl: "",
@@ -179,8 +230,6 @@ export default {
 
     //上传物料图片
     handleAvatarSuccess(res, file) {
-      console.log(res, file);
-      console.log(this.checkIndex);
       this.dynamicValidateForm.details[this.checkIndex].imgUrl =
         res.data.imageUrl;
       // console.log(this.data.imageUrl)

@@ -185,11 +185,6 @@
         </div>
         <p class="title" v-if="model == 8">新建采购</p>
 
-        
-
-        
-        
-
         <span v-if="model == 1" class="active">消息列表</span>
         <span v-if="model == 2" @click="linkTo(5)" style="cursor: pointer">
           任务列表
@@ -212,8 +207,6 @@
           物料采购
           <span class="active">->新建采购</span>
         </span>
-
-      
 
         <!-- 页签部分 -->
         <div class="bookmark-div" v-show="bookmark.show">
@@ -654,6 +647,10 @@ export default {
     if (this.$cookie.get("userInfo")) {
       this.userInfo = JSON.parse(this.$cookie.get("userInfo"));
     }
+    try {
+      let names = this.$route.name;
+      this.model = this.typeStatus[names].value;
+    } catch (error) {}
   },
   mounted() {
     this.init();
@@ -674,10 +671,9 @@ export default {
   methods: {
     //面包屑修改
     changeCrumbs() {
-      var crumbs = this.$route.path.slice(1);
-
+      let crumbs = this.$route.name;
       this.model = this.typeStatus[crumbs].value;
-
+      // var crumbs = this.$route.path.slice(1);
       // switch (crumbs) {
       //   case "task":
       //     this.model = 0;
@@ -1113,7 +1109,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  
 }
 
 .header span {
@@ -1222,7 +1217,7 @@ export default {
   background: #fff;
   margin-top: 15px;
   border-radius: 4px;
-  height: calc( 100vh - 85px );
+  height: calc(100vh - 85px);
   overflow-y: auto;
 }
 .custom-left {

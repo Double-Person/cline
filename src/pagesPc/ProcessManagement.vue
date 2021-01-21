@@ -19,7 +19,13 @@
       <el-table-column prop="length" label="长度"> </el-table-column>
       <el-table-column prop="num" label="订单数量"> </el-table-column>
 
-      <el-table-column prop="endNum" label="已经加工"> </el-table-column>
+      <el-table-column prop="endNum" label="已经加工">
+        <template slot-scope="scope">
+          <div @click="editNum(scope.row)" class="drawing">
+            {{ scope.row.endNum }}
+          </div>
+        </template>
+      </el-table-column>
 
       <el-table-column width="100" label="加工规格图">
         <template slot-scope="scope">
@@ -31,8 +37,15 @@
       </el-table-column>
 
       <el-table-column prop="isFirstCheck" width="150" label="是否首件确认">
+        <template slot-scope="scope">
+          <!-- {{ scope.row.isFirstCheck === "N" ? "暂未确认" : "已确认" }} -->
+          <div class="drawings" v-if="scope.row.isFirstCheck === 'N'" key="isFirstCheck">
+            <div class="drawing edit" @click="firstConfirm(scope.row.childId)" > 确认 </div>
+          </div>
+          <div v-else key="isFirstCheck">{{ scope.row.isFirstCheck === "N" ? "暂未确认" : "已确认" }}</div>
+        </template>
       </el-table-column>
-      <el-table-column prop="useTime" label="加工用时"> </el-table-column>
+      <el-table-column prop="useTime" width="150" label="加工用时"> </el-table-column>
       <el-table-column label="加工顺序">
         <template slot-scope="scope">
           <div class="drawings">
@@ -54,7 +67,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" width="150" label="操作">
+      <el-table-column fixed="right" width="50" label="操作">
         <template slot-scope="scope">
           <div class="drawings">
             <div
@@ -63,8 +76,21 @@
             >
               编辑
             </div>
-            <div class="drawing start" @click="start(scope.row.id)">开始</div>
-            <div class="drawing statement" @click="statement(scope.row.id)">
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column fixed="right" width="100" label="操作">
+        <template slot-scope="scope">
+          <div class="drawings">
+            <!-- <div
+              class="drawing edit"
+              @click="drawings(scope.$index, scope.row)"
+            >
+              编辑
+            </div> -->
+            <div class="drawing start" @click="start(scope.row)">开始</div>
+            <div class="drawing statement" @click="statement(scope.row)">
               结单
             </div>
           </div>
@@ -73,15 +99,21 @@
     </el-table>
 
     <process-management-edit ref="processEdit" @success="getList" />
+    <process-management-num-edit ref="processNumEdit" @success="getList" />
     <preview-picture ref="previewPicture" />
   </div>
 </template>
 
 <script>
 import ProcessManagementEdit from "./ProcessManagementEdit.vue";
+import ProcessManagementNumEdit from "./ProcessManagementNumEdit.vue";
 import PreviewPicture from "../components/PreviewPicture";
 export default {
-  components: { ProcessManagementEdit, PreviewPicture },
+  components: {
+    ProcessManagementEdit,
+    ProcessManagementNumEdit,
+    PreviewPicture,
+  },
   name: "ProcessManagement",
   data() {
     return {
@@ -89,9 +121,29 @@ export default {
     };
   },
   created() {
+    /**
+     * 1 首件确认，加工数量
+     * 0 开始
+     * 1结束
+     */
     this.getList();
   },
   methods: {
+    // （0未开始、1已开始、2已结束）
+    // 编辑数量
+    editNum(row) {
+      
+      if(row.status == 1) {
+        this.$refs.processNumEdit.openDialo(row.endNum,row.childId);
+      }
+      if(row.status == 0 ) {
+        this.$message.error( "先开始任务");
+      }
+      if(row.status == 2 ) {
+        this.$message.error("任务已结束");
+      }
+ 
+    },
     // 编辑
     drawings(index, row) {
       this.$refs.processEdit.openDialo(row.id);
@@ -106,28 +158,30 @@ export default {
             ele.child = ele.details.map((item) => {
               return {
                 id: ele.id,
+                status: ele.status,
                 ordEndTime: ele.ordEndTime,
                 orderNo: ele.orderNo,
                 customer: ele.customer,
                 matter: ele.matter,
-                col: ele.details.length,
+                // col: ele.details.length,
 
+                childId: item.id,
                 length: item.length,
                 num: item.num,
                 imgUrl: item.imgUrl,
                 isFirstCheck: item.isFirstCheck,
                 useTime: item.useTime,
                 endNum: item.endNum,
-                hierarchy: "child",
-                hasChild: false
+                // hierarchy: "child",
+                hasChild: false,
               };
             });
           });
-          let children = res.data.map(ele => ele.child)
+          let children = res.data.map((ele) => ele.child);
           let list = [];
           // 将每个详情数据展开
-          for(let i = 0; i < children.length; i++) {
-            list.push(...children[i])
+          for (let i = 0; i < children.length; i++) {
+            list.push(...children[i]);
           }
 
           // warpList = res.data;
@@ -136,19 +190,14 @@ export default {
           // 通过id排序，将相同id数据放在一起，将对应的列表数据与详情数据放在一起
           warpList.sort((a, b) => a.id - b.id);
 
-          
-        //  let ids = warpList.map(item => item.id);
-        //  let newIds = [...new Set(ids)]
           // 过滤
-          let filterList = warpList.filter(item => !item.hasChild);
+          let filterList = warpList.filter((item) => !item.hasChild);
           // console.log(filterList);
 
-          this.tableData = filterList
-          this.setrowspans()
-          
-         
-          console.log(this.tableData);
+          this.tableData = filterList;
+          this.setrowspans();
 
+          console.log(this.tableData);
         } else {
           this.$message.error("获取列表失败");
         }
@@ -169,14 +218,34 @@ export default {
       });
     },
     // 开始：/api/processDetail/start     参数：id（详情ID）
-    start(id) {
-      this.$http.get("/api/processDetail/start", { id }).then((res) => {
+    start(row) {
+  
+      let {childId, status} = row;
+      console.log(childId)
+      if(status == 1) {
+        this.$message.error( "任务已开始");
+        return false;
+      }
+      if(status == 2) {
+        this.$message.error( "任务已结束");
+        return false;
+      }
+      this.$http.get("/api/processDetail/start", { id: childId }).then((res) => {
         this.showMsg(res);
       });
     },
     // 结单：/api/processDetail/end     参数：id（详情ID）
-    statement(id) {
-      this.$http.get("/api/processDetail/end", { id }).then((res) => {
+    statement(row) {
+      let {childId, status} = row;
+      if(status == 0) {
+        this.$message.error( "任务还未开始");
+        return false;
+      }
+      if(status == 2) {
+        this.$message.error( "任务已结束");
+        return false;
+      }
+      this.$http.get("/api/processDetail/end", { id: childId }).then((res) => {
         this.showMsg(res);
       });
     },
@@ -195,11 +264,11 @@ export default {
       this.$refs.previewPicture.previewImg(img);
     },
 
-     setrowspans() {
+    setrowspans() {
       // 先给所有的数据都加一个v.rowspan = 1
-      this.tableData.forEach(v => {
-        v.rowspan = 1
-      })
+      this.tableData.forEach((v) => {
+        v.rowspan = 1;
+      });
       // 双层循环
       for (let i = 0; i < this.tableData.length; i++) {
         // 内层循环，上面已经给所有的行都加了v.rowspan = 1
@@ -209,55 +278,24 @@ export default {
         // 下一行的v.rowspan - 1
         for (let j = i + 1; j < this.tableData.length; j++) {
           if (this.tableData[i].id === this.tableData[j].id) {
-            this.tableData[i].rowspan++
-            this.tableData[j].rowspan--
+            this.tableData[i].rowspan++;
+            this.tableData[j].rowspan--;
           }
         }
         // 这里跳过已经重复的数据
-        i = i + this.tableData[i].rowspan - 1
+        i = i + this.tableData[i].rowspan - 1;
       }
     },
-  
-  
 
     // 跨行跨列
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      console.log('行', row.col)
-      console.log('列', column.col)
-      // console.log(row, column, rowIndex, columnIndex)
-      // 当前行row、当前列column、当前行号rowIndex、当前列号columnIndex四个属性
-      // 该函数可以返回一个包含两个元素的数组，第一个元素代表rowspan，第二个元素代表colspan。 也可以返回一个键名为rowspan和colspan的对象
-      if (columnIndex < 4) {
+      const includesCol = [0, 1, 2, 3, 4, 10, 11];
+      if (includesCol.includes(columnIndex)) {
         return {
           rowspan: row.rowspan,
-          colspan: 1
-        }
-        // if (rowIndex % 2 === 0) {
-        //     return {
-        //       rowspan: 2,
-        //       colspan: 1
-        //     };
-        //   } else {
-        //     return {
-        //       rowspan: 0,
-        //       colspan: 0
-        //     };
-        //   }
-
-
-          // if (row.col) {
-          //   return { 
-          //     rowspan:  row.col || 0,  // 行
-          //     colspan:  row.col ? 1 : 0  // lie
-          //   };
-          // } else {
-          //   return {
-          //     rowspan: 0,
-          //     colspan: 0
-          //   };
-          // }
+          colspan: 1,
+        };
       }
-      
     },
   },
 };

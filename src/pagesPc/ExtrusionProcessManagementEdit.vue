@@ -40,7 +40,8 @@
         prop="clolor"
         :rules="[{ required: true, message: '请选择颜色', trigger: 'change' }]"
       >
-        <el-select
+        <el-input v-model="dynamicValidateForm.clolor"></el-input>
+        <!-- <el-select
           v-model="dynamicValidateForm.clolor"
           placeholder="请选择颜色"
         >
@@ -50,14 +51,15 @@
             v-for="item in clolors"
             :key="item"
           ></el-option>
-        </el-select>
+        </el-select> -->
       </el-form-item>
       <el-form-item
         label="材质"
         prop="material"
         :rules="[{ required: true, message: '请选择材质', trigger: 'change' }]"
       >
-        <el-select
+        <el-input v-model="dynamicValidateForm.material"></el-input>
+        <!-- <el-select
           v-model="dynamicValidateForm.material"
           placeholder="请选择材质"
         >
@@ -67,7 +69,7 @@
             v-for="item in materials"
             :key="item"
           ></el-option>
-        </el-select>
+        </el-select> -->
       </el-form-item>
 
       <el-form-item
@@ -92,7 +94,13 @@
         <el-input v-model="dynamicValidateForm.transm"></el-input>
       </el-form-item>
 
-      <el-form-item prop="imgUrl" label="上传加工规格图" :rules="[{ required: true, message: '规格图不能为空', trigger: 'change' }]">
+      <el-form-item
+        prop="imgUrl"
+        label="上传加工规格图"
+        :rules="[
+          { required: true, message: '规格图不能为空', trigger: 'change' },
+        ]"
+      >
         <el-upload
           class="avatar-uploader"
           :action="$httppath"
@@ -134,7 +142,7 @@ export default {
         orderNo: "",
         model: "", //（磨具号）
         clolor: "", //（颜色）
-        color: '',
+        color: "",
         material: "", //（材质）
         length: "", //（长度）
         num: "", //（数量）
@@ -212,7 +220,7 @@ imgUrl（产品规格图）
       this.$http.get("/api/squeeze/findOrderById", { id }).then((res) => {
         if (res.code == 1000) {
           this.dynamicValidateForm = res.data;
-          this.dynamicValidateForm.clolor = res.data.color
+          this.dynamicValidateForm.clolor = res.data.color;
         }
       });
     },

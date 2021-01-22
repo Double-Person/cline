@@ -37,9 +37,8 @@ export default {
 
   methods: {
     openDialo(endNum, id) {
-      console.log("----", endNum, id);
       this.form.id = id;
-      this.form.endNum = endNum;
+      this.form.endNum = endNum * 1;
       this.dialogFormVisible = true;
     },
     submitForm(formName) {

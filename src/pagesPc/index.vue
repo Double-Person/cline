@@ -99,7 +99,7 @@
         <timeout-orders :type="query.giveOrGet" />
       </div>
       <!-- 中间 -->
-      <div class="main">
+      <div class="main" :class="model != 0 ?'custom-main' : '' ">
         <slot name="title"> </slot>
         <!-- 任务列表 -->
         <p class="title" v-if="model == 0">
@@ -1224,7 +1224,8 @@ export default {
   /* margin-right: 4px; */
   margin-right: 10px;
   /* overflow-x: auto; */
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .custom-right {
   /* margin-left: 4px; */
@@ -1238,6 +1239,9 @@ export default {
   min-width: 752px; */
   /* margin: 0 auto; */
   width: 1089px;
+}
+.custom-main{
+  width: 80%;
 }
 
 .title {

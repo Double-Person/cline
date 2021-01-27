@@ -39,7 +39,7 @@ export default {
       timeOrder: [],
       types: -1,  // 类型
       page: 1,  // 当前页数
-      pageSize: 15,   // 每页条数
+      pageSize: 20,   // 每页条数
     };
   },
   watch: {
@@ -107,7 +107,7 @@ export default {
   .time-out-order-title {
     font-size: 12px;
     text-size-adjust: none;
-    color: #000000;
+    color: red;
     line-height: 24px;
     text-align: center;
     margin: 10px 0 13px 0;
@@ -119,7 +119,7 @@ export default {
       flex-wrap: nowrap;
       justify-content: space-between;
       span {
-        color: #747474;
+        color: red;
         font-size: 9px;
         text-size-adjust: none;
         display: inline-block;

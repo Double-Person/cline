@@ -60,6 +60,7 @@
           :headers="header"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
+           v-loading="imgLoading"
         >
           <img
             v-if="dynamicValidateForm.productImg"
@@ -67,7 +68,7 @@
             class="avatar"
           />
 
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <i v-if="!dynamicValidateForm.productImg" class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
 
@@ -131,6 +132,7 @@ export default {
   name: "PrivateMoneyEdit",
   data() {
     return {
+      imgLoading: false,
       loading: true,
       dialogTitle: "",
       authorization: "",
@@ -223,7 +225,7 @@ export default {
         } else {
           this.$message.error("提交失败");
         }
-      });
+      }).catch(() => this.$message.error("系统错误"))
     },
     /**
      * 客户列表接口：/api/customer/findCustomers     参数：searchText（）搜索条件
@@ -282,7 +284,8 @@ export default {
     handleAvatarSuccess(res, file) {
       // console.log(res)
       this.dynamicValidateForm.productImg = res.data.imageUrl;
-      // console.log(this.data.productImg)
+      this.imgLoading = false;
+      console.log(this.dynamicValidateForm.productImg)
     },
     //图片大小限制
     beforeAvatarUpload(file) {
@@ -295,6 +298,7 @@ export default {
       if (!isLt5M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
+      this.imgLoading = true;
       return isLt5M;
       return isJPG && isLt5M;
     },

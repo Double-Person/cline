@@ -111,8 +111,12 @@
             v-if="dynamicValidateForm.imgUrl"
             :src="dynamicValidateForm.imgUrl"
             class="avatar"
+            v-loading="imgLoading"
           />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <i
+            v-if="!dynamicValidateForm.imgUrl"
+            class="el-icon-plus avatar-uploader-icon"
+          ></i>
         </el-upload>
       </el-form-item>
 
@@ -130,6 +134,7 @@ export default {
   name: "ProcessManagementEdit",
   data() {
     return {
+      imgLoading: false,
       authorization: "",
       header: {},
       dialogFormVisible: false,
@@ -241,6 +246,7 @@ imgUrl（产品规格图）
     handleAvatarSuccess(res, file) {
       // console.log(res)
       this.dynamicValidateForm.imgUrl = res.data.imageUrl;
+      this.imgLoading = false;
     },
     //图片大小限制
     beforeAvatarUpload(file) {
@@ -249,6 +255,7 @@ imgUrl（产品规格图）
       if (!isLt5M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
+      this.imgLoading = true;
       return isLt5M;
       return isJPG && isLt5M;
     },

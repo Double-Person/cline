@@ -10,8 +10,8 @@
       </div>
       <div class="search">
         <div class="label">客户姓名：</div>
-        <el-input v-model="customerName" placeholder="请输入内容"></el-input>
-        <el-button type="primary" class="btn">查找</el-button>
+        <el-input v-model="customerName" placeholder="请输入内容" @keyup.enter="getList"></el-input>
+        <el-button type="primary" class="btn" @click="getList">查找</el-button>
       </div>
     </div>
 

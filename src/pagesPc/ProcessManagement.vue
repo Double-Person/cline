@@ -6,9 +6,9 @@
     </div>
     <el-table
       :data="tableData"
-      stripe
       border
       :span-method="objectSpanMethod"
+      :row-class-name="tableRowClassName"
       style="width: 100%"
     >
       <el-table-column prop="ordEndTime" width="180" label="订单日期"> </el-table-column>
@@ -111,6 +111,13 @@ export default {
     this.getList();
   },
   methods: {
+    // 生产数量大于竺于订单数量就将背景置于绿色，
+    tableRowClassName({ row, rowIndex }) {
+      if (Number.parseInt(row.endNum) >= Number.parseInt(row.num)) {
+        return "warning-row";
+      }
+      return "";
+    },
     // 编辑数量
     editNum(row) {
       if (row.status == 1) {
@@ -175,7 +182,7 @@ export default {
       // 将展开的详情数据放入列表中
       warpList.push(...list, ...data);
       // 通过id排序，将相同id数据放在一起，将对应的列表数据与详情数据放在一起
-      warpList.sort((a, b) => a.id - b.id);
+      // warpList.sort((a, b) => a.id - b.id);
       // 过滤
       this.tableData = warpList.filter((item) => !item.hasChild);
     },
@@ -278,7 +285,7 @@ export default {
 
     // 跨行跨列
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      const includesCol = [0, 1, 2, 3, 4, 10, 11];
+      const includesCol = [0, 1, 2, 3, 10, 11];
       if (includesCol.includes(columnIndex)) {
         return {
           rowspan: row.rowspan,
@@ -292,4 +299,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../static/css/common.scss";
+.warp {
+  /deep/ .el-table .warning-row {
+    background: rgb(123, 190, 123);
+  }
+}
 </style>

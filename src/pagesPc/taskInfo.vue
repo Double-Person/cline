@@ -137,20 +137,34 @@
       </div>
       <div>
         <span>出货留存：</span>
-        <el-upload
-          class="avatar-uploader"
-          :action="$httppath"
-          :headers="header"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          ><img
-            v-if="sourseImg"
-            :src="sourseImg"
-            class="avatar"
-          />
-         
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+        <el-popover
+          placement="right"
+          width="400"
+          trigger="hover">
+          <div style="height: 400px; background: #fff;" v-if="sourseImg">
+            <img   
+              :src="sourseImg"
+              class="popover-avatar"
+            />
+          </div>
+          <el-upload
+            slot="reference"
+            class="avatar-uploader"
+            :action="$httppath"
+            :headers="header"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :show-file-list="false"
+            ><img
+              v-if="sourseImg"
+              :src="sourseImg"
+              class="avatar"
+            />
+          
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-popover>
+        
       </div>
      
       <div>
@@ -546,6 +560,11 @@ export default {
 
 <style scoped>
 @import "../../static/css/upLoadFile.scss";
+.popover-avatar{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .contain {
   display: flex;
   justify-content: flex-end;

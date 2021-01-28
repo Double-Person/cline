@@ -969,6 +969,7 @@ export default {
       }
       this.dateArr = dateArr;
       this.query.time = dateArr[id].value;
+      this.query.keywords = '';
       this.search();
     },
     //修改查询参数

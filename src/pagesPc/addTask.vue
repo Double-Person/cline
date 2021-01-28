@@ -261,6 +261,20 @@
         </el-dialog> -->
       </div>
 
+       <div v-show="showTypes">
+        <div>
+          <span>任务描述：</span>
+        </div>
+        <div>
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="方便右侧使用"
+            v-model="form.des">
+          </el-input>
+        </div>
+      </div>
+
       <div v-show="showTypes">
         <div>
           <span>价格：</span>
@@ -269,6 +283,9 @@
           <input type="text" class="price" v-model="form.price" />
         </div>
       </div>
+
+      
+
       <div v-show="showTypes">
         <div>
           <span>任务环节：</span>
@@ -569,6 +586,7 @@ export default {
       // userName: "test"
       // works: 1
       form: {
+        des: '', // 任务描述
         productId: "", // 订单关键词
         name: "", // 客户名
         urgent: 6, // 加急（5：加急；6：不加急）
@@ -881,6 +899,7 @@ export default {
         executorIds: this.getArrId(this.usersSelect, "userId"), // 任务执行人（多个步骤id以,分开）usersSelect
         pusherIds: this.getArrId(this.usersGive, "userId"), // 任务推送人（多个步骤id以,分开）usersGive，
         shipment: this.form.tasksId,
+        des: this.form.des,
       };
       // console.log(params.checks)
       this.$message.closeAll();

@@ -50,14 +50,14 @@
               size="mini"
               icon="el-icon-top"
               circle
-              @click="moveOrder(scope.row.id, 1)"
+              @click="moveOrder(scope.row.processId, 1)"
             ></el-button>
             <el-button
               type="danger"
               size="mini"
               icon="el-icon-bottom"
               circle
-              @click="moveOrder(scope.row.id, 2)"
+              @click="moveOrder(scope.row.processId, 2)"
             ></el-button>
           </div>
         </template>
@@ -121,7 +121,7 @@ export default {
     // 编辑数量
     editNum(row) {
       if (row.status == 1) {
-        this.$refs.processNumEdit.openDialo(row.endNum, row.childId);
+        this.$refs.processNumEdit.openDialo(row.endNum, row.detailId);
       }else if (row.status == 0) {
         this.$message.error("先开始任务");
       }else if (row.status == 2) {
@@ -130,63 +130,20 @@ export default {
     },
     // 编辑
     drawings(row) {
-      this.$refs.processEdit.openDialo(row.id);
+      this.$refs.processEdit.openDialo(row.processId);
     },
     // 查询加工进程列表：/api/process/findProcesses   参数：无
     getList() {
       this.$http.get("/api/process/findProcesses", {}).then((res) => {
         if (res.code == 1000) {
-          this.handelData(res).setrowspans();
+          this.tableData = res.data;
+          this.setrowspans()
         } else {
           this.$message.error("获取列表失败");
         }
       });
     },
-    handelData(res) {
-      let list = [];
-      res.data.forEach((ele) => {
-        ele.hasChild = !!ele.details.length;
-        ele.child = ele.details.map((item) => {
-          return {
-            id: ele.id,
-            status: ele.status,
-            ordEndTime: ele.ordEndTime,
-            orderNo: ele.orderNo,
-            customer: ele.customer,
-            matter: ele.matter,
-
-            childId: item.id,
-            length: item.length,
-            num: item.num,
-            imgUrl: item.imgUrl,
-            isFirstCheck: item.isFirstCheck,
-            useTime: item.useTime,
-            endNum: item.endNum,
-            hasChild: false,
-          };
-        });
-      });
-      let children = res.data.map((ele) => ele.child);
-      // 将每个详情数据展开
-      // for (let i = 0; i < children.length; i++) {
-      //   list.push(...children[i]);
-      // }
-      children.forEach((ele) => {
-        list.push(...ele);
-      });
-      this.concatArr(list, res.data);
-      return this;
-    },
-    concatArr(list, data) {
-      let warpList = [];
-      // 将展开的详情数据放入列表中
-      warpList.push(...list, ...data);
-      // 通过id排序，将相同id数据放在一起，将对应的列表数据与详情数据放在一起
-      // warpList.sort((a, b) => a.id - b.id);
-      // 过滤
-      this.tableData = warpList.filter((item) => !item.hasChild);
-    },
-
+  
     // 修改加工顺序：/api/process/updateProcessOrder     参数：id（加工进程ID）；type（修改顺序类型，1上移、2下移）
     moveOrder(id, type) {
       this.$http
@@ -198,7 +155,7 @@ export default {
     // 首件确认：/api/processDetail/firstCheck     参数：id（详情ID）
     firstConfirm(row) {
       // 1 首件确认
-      let { childId, status } = row;
+      let { detailId, status } = row;
       if (status == 0) {
         this.$message.error("请先开始任务");
         return false;
@@ -208,13 +165,13 @@ export default {
         return false;
       }
       
-      this.$http.get("/api/processDetail/firstCheck", { id }).then((res) => {
+      this.$http.get("/api/processDetail/firstCheck", { id: detailId }).then((res) => {
         this.showMsg(res);
       });
     },
     // 开始：/api/processDetail/start     参数：id（详情ID）
     start(row) {
-      let { childId, status } = row;
+      let { detailId, status } = row;
       if (status == 1) {
         this.$message.error("任务已开始");
         return false;
@@ -224,14 +181,14 @@ export default {
         return false;
       }
       this.$http
-        .get("/api/processDetail/start", { id: childId })
+        .get("/api/processDetail/start", { id: detailId })
         .then(res => {
           this.showMsg(res);
         });
     },
     // 结单：/api/processDetail/end     参数：id（详情ID）
     statement(row) {
-      let { childId, status } = row;
+      let { detailId, status } = row;
       if (status == 0) {
         this.$message.error("任务还未开始");
         return false;
@@ -240,7 +197,7 @@ export default {
         this.$message.error("任务已结束");
         return false;
       }
-      this.$http.get("/api/processDetail/end", { id: childId }).then((res) => {
+      this.$http.get("/api/processDetail/end", { id: detailId }).then((res) => {
         this.showMsg(res);
       });
     },
@@ -262,24 +219,16 @@ export default {
 
     setrowspans() {
       // 先给所有的数据都加一个v.rowspan = 1
-      this.tableData.forEach((v) => {
-        v.rowspan = 1;
-      });
-      // 双层循环
+      this.tableData.forEach(v => { v.rowspan = 1 })
       for (let i = 0; i < this.tableData.length; i++) {
-        // 内层循环，上面已经给所有的行都加了v.rowspan = 1
-        // 这里进行判断
-        // 如果当前行的id和下一行的id相等
-        // 就把当前v.rowspan + 1
-        // 下一行的v.rowspan - 1
         for (let j = i + 1; j < this.tableData.length; j++) {
-          if (this.tableData[i].id === this.tableData[j].id) {
-            this.tableData[i].rowspan++;
-            this.tableData[j].rowspan--;
+          if (this.tableData[i].processId === this.tableData[j].processId) {
+            this.tableData[i].rowspan++
+            this.tableData[j].rowspan--
           }
         }
         // 这里跳过已经重复的数据
-        i = i + this.tableData[i].rowspan - 1;
+        i = i + this.tableData[i].rowspan - 1
       }
     },
 

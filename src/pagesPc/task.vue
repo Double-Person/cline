@@ -44,7 +44,7 @@
                   src="../../static/imgPc/logs.png"
                   alt=""
                 />
-                <div class="delivery" @click.stop="Bacmask(item.id)">
+                <div class="delivery" @click.stop="Bacmask(item)">
                   {{ item.shipName }}
                 </div>
               </div>
@@ -241,9 +241,12 @@ export default {
         ? this.$set(this.upindex, index, "")
         : this.$set(this.upindex, index, index);
     },
-    Bacmask(id) {
+    Bacmask(item) {
+      if(item.shipment == 2 || item.shipmentNo) {
+        return false;
+      }
       this.mask = true;
-      this.shipment = id;
+      this.shipment = item.id;
     },
     close() {
       this.mask = false;

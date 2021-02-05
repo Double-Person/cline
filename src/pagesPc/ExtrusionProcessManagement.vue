@@ -8,6 +8,11 @@
           >新增<i class="el-icon-plus el-icon--right"></i
         ></el-button>
       </div>
+      <div class="search">
+        <div class="label">模具号：</div>
+        <el-input v-model="searchText" placeholder="请输入内容" @keyup.enter="getList"></el-input>
+        <el-button type="primary" class="btn" @click="getList">查找</el-button>
+      </div>
     </div>
     <el-table
       :data="tableData"
@@ -102,6 +107,7 @@ export default {
   data() {
     return {
       tableData: [],
+      searchText: ''
     };
   },
   created() {
@@ -123,7 +129,7 @@ export default {
       this.$refs.extrusionLogs.openDialo(id);
     },
     getList() {
-      this.$http.get("/api/squeeze/findSqueezes", {}).then((res) => {
+      this.$http.get("/api/squeeze/findSqueezes", {searchText: this.searchText}).then((res) => {
         if (res.code == 1000) {
           this.tableData = res.data;
         } else {

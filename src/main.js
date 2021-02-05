@@ -40,7 +40,7 @@ Vue.prototype.$cookie = new Cookie();
 Vue.config.productionTip = false
 
 const URL = 'http://yflh.hkzhtech.com/tasks/';
-// const URL = 'http://192.168.0.116:8080/tasks/';
+// const URL = 'http://192.168.0.117:8080/tasks/';
 // const URL = 'http://www.lsibss.com:8080/tasks/';
 
 // 之前文件上传地址

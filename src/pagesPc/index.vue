@@ -18,7 +18,8 @@
           <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(11)">
             <span>挤出进程管理</span>
           </div>
-          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(12)">
+          
+          <div style="margin: 0 20px 0 0; cursor: pointer" @click="linkTo(12)" v-show="userInfo.fundsPower">
             <span>私款管理</span>
           </div>
 
@@ -43,14 +44,13 @@
           <div
             style="margin: 0 20px 0 0; cursor: pointer"
             @click="linkTo(13)"
-            v-show="userInfo.tasksPower"
+            v-show="userInfo.customerPower"
           >
             <span>客户管理</span>
           </div>
           <div
             style="margin: 0 20px 0 0; cursor: pointer"
             @click="linkTo(14)"
-            v-show="userInfo.tasksPower"
           >
             <span>产品管理</span>
           </div>

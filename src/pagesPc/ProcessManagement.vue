@@ -1,8 +1,17 @@
 <template>
   <div class="warp">
     <div class="nav-title">加工明细清单</div>
+    
     <div class="sub-title">
-      <span class="active">加工明细清单</span>
+      <div>
+        <span class="active">加工明细清单</span>
+        
+      </div>
+      <div class="search">
+        <div class="label">搜索：</div>
+        <el-input v-model="searchText" placeholder="请输入客户/物料型号内容" @keyup.enter="getList"></el-input>
+        <el-button type="primary" class="btn" @click="getList">查找</el-button>
+      </div>
     </div>
     <el-table
       :data="tableData"
@@ -103,6 +112,7 @@ export default {
   name: "ProcessManagement",
   data() {
     return {
+      searchText: '',
       tableData: [],
     };
   },
@@ -134,7 +144,7 @@ export default {
     },
     // 查询加工进程列表：/api/process/findProcesses   参数：无
     getList() {
-      this.$http.get("/api/process/findProcesses", {}).then((res) => {
+      this.$http.get("/api/process/findProcesses", {searchText: this.searchText}).then((res) => {
         if (res.code == 1000) {
           this.tableData = res.data;
           this.setrowspans()

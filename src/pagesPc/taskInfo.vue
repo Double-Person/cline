@@ -5,6 +5,13 @@
       <button class="abled" @click="blankingLog">切料日志</button>
       <button class="abled" @click="checkFigure()">查看产品图样</button>
       <!-- <button @click="amendTasks" class="amend">修改任务</button> -->
+      <button
+        @click="stopTasks"
+        :class="data.canEndPower == true ? 'abled' : 'disabled'"
+      >
+        结束任务
+      </button>
+
 
       <button
         @click="amendTasks"
@@ -228,7 +235,7 @@ export default {
   data() {
     return {
       data: {
-        
+        canEndPower: false,
         productImg: '',
         canAccept: false,
         canFeedback: false,
@@ -373,6 +380,8 @@ export default {
             };
             console.log(resData);
             data.canAccept = resData.canAccept;
+            data.canEndPower = resData.canEndPower;
+            
             data.productImg = resData.productImg;
             data.canFeedback = resData.canFeedback;
             data.canUpdate = resData.canUpdate;
@@ -514,6 +523,32 @@ export default {
         path: "/amendTask",
         query: this.data,
       });
+    },
+    // 结束任务
+    stopTasks() {
+      if(!this.data.canEndPower) {
+        return false;
+      }
+      this.$http
+          .get("/api/tasks/endTasks", {tasksId: this.$route.query.id})
+          .then((res) => {
+            if (res.code == 1000) {
+              this.$message({
+                message: res.msg,
+                type: "success",
+              });
+              setTimeout(() => {
+                this.$router.go(0);
+              }, 1000);
+            } else if (res.code == 1001) {
+              this.$message({
+                message: res.msg,
+                type: "warning",
+              });
+            }
+            // this.$router.go(0);
+          })
+          
     },
     //点我结束
     endStatus(status, id, step) {
